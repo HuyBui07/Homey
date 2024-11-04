@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "565119366574",
+    "project_id": "homey-31fc7",
+    "storage_bucket": "homey-31fc7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565119366574:android:dd341b3bc6fb75f7a4843f",
+        "android_client_info": {
+          "package_name": "com.example.homey"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7X1sqd8L-PYs432Y-TJ27RRnf-RA8oq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
