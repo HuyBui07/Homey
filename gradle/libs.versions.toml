@@ -17,6 +17,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 firebaseFirestore = "25.1.1"
+places = "4.1.0"
 playServicesBase = "18.5.0"
 playServicesMaps = "19.0.0"
 playServicesMapsVersion = "17.0.0"
@@ -36,6 +37,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 
