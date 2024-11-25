@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.homey.R
 import com.example.homey.data.model.Estate
 import android.content.Intent
+import android.widget.Spinner
 import androidx.activity.result.contract.ActivityResultContracts
 
 // Firebase
@@ -53,18 +54,25 @@ class AddRealEstateActivity : AppCompatActivity() {
             val ownerRef = db.collection("users").document("qZ75wqytWzYGmI2M9OUO")
 
             // Add property to Firestore
-            val propEstate = Estate(
-                title = "Villa",
-                propertyType = "House",
-                location = "Kigali",
-                price = 100000.0,
-                size = 200.0,
-                bedrooms = 4,
-                bathrooms = 3,
+            val title = findViewById<EditText>(R.id.titleEditText).text.toString()
+            val propertyType = findViewById<Spinner>(R.id.propertyTypeSpinner).selectedItem.toString()
+            val location = findViewById<EditText>(R.id.locationEditText).text.toString()
+            val price = findViewById<EditText>(R.id.priceEditText).text.toString().toDouble()
+            val size = findViewById<EditText>(R.id.sizeEditText).text.toString().toDouble()
+            val bedrooms = findViewById<EditText>(R.id.bedroomsEditText).text.toString().toInt()
+            val bathrooms = findViewById<EditText>(R.id.bathroomsEditText).text.toString().toInt()
+            val estate = Estate(
+                title = title,
+                propertyType = propertyType,
+                location = location,
+                price = price,
+                size = size,
+                bedrooms = bedrooms,
+                bathrooms = bathrooms,
                 ownerRef = ownerRef
             )
 
-            estateRepo.addEstate(propEstate) { isSuccess ->
+            estateRepo.addEstate(estate) { isSuccess ->
                 if (isSuccess) {
                     // Property added successfully
                 } else {
