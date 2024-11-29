@@ -127,7 +127,7 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <!-- Thanh điều hướng ở dưới cùng -->
+    <!-- Thanh navigator ở dưới cùng -->
     <LinearLayout
         android:id="@+id/bottomNavBar"
         android:layout_width="match_parent"
