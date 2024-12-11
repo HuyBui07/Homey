@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottomNavBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="#FFFFFF"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/nav_home"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:contentDescription="Home"
+        android:padding="10dp"
+        android:src="@drawable/home_nav_act"
+        android:layout_gravity="center"/>
+
+    <ImageButton
+        android:id="@+id/nav_favorite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="Favorite"
+        android:padding="10dp"
+        android:src="@drawable/fav_nav"
+        android:layout_gravity="center"/>
+
+    <ImageButton
+        android:id="@+id/nav_add_estate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="Profile"
+        android:padding="10dp"
+        android:src="@drawable/add_nav"
+        android:layout_gravity="center"/>
+
+    <ImageButton
+        android:id="@+id/nav_notification"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="Profile"
+        android:padding="10dp"
+        android:src="@drawable/noti_nav"
+        android:layout_gravity="center"/>
+
+    <ImageButton
+        android:id="@+id/nav_categories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="Profile"
+        android:padding="10dp"
+        android:src="@drawable/cate_nav" />
+</LinearLayout>
