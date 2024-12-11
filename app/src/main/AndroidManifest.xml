@@ -15,10 +15,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Homey"
-        tools:targetApi="31">
+        android:theme="@style/Theme.Homey">
         <activity
-            android:name=".ui.AddRealEstateActivity"
+            android:name=".MainPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.AddRealEstateActivity"
+            android:exported="true" />
+
+        <activity android:name=".ui.SettingsActivity"
+            android:exported="true" />
+
         <activity
             android:name=".ui.SpecifyLocationActivity"
             android:exported="true"

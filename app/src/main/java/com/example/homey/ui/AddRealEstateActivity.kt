@@ -31,6 +31,12 @@ class AddRealEstateActivity : AppCompatActivity() {
             insets
         }
 
+        // Set the title of the action bar
+        supportActionBar?.title = "Add Real Estate"
+
+        // Enable the back button
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         // Interactivity
         val locationEditTextView = findViewById<EditText>(R.id.locationEditText)
         locationEditTextView.isFocusable = false
@@ -80,5 +86,10 @@ class AddRealEstateActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }
