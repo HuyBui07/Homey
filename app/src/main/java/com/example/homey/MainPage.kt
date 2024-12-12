@@ -3,6 +3,7 @@ package com.example.homey
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.homey.ui.AddRealEstateActivity
@@ -16,19 +17,12 @@ class MainPage : AppCompatActivity() {
         // Load the default fragment
         loadFragment(HomeFragment())
 
-        // Nav bar logic
-        val navAddEstate = findViewById<ImageButton>(R.id.nav_add_estate)
-        navAddEstate.setOnClickListener {
-            val intent = Intent(this, AddRealEstateActivity::class.java)
-            startActivity(intent)
-        }
-
-        val navHome = findViewById<ImageButton>(R.id.nav_home)
+        val navHome = findViewById<LinearLayout>(R.id.nav_home)
         navHome.setOnClickListener {
             loadFragment(HomeFragment())
         }
 
-        val navSettings = findViewById<ImageButton>(R.id.nav_categories)
+        val navSettings = findViewById<LinearLayout>(R.id.nav_settings)
         navSettings.setOnClickListener {
             loadFragment(SettingsFragment())
         }

@@ -1,4 +1,4 @@
-package com.example.homey
+package com.example.homey.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.homey.R
 import com.example.homey.data.model.Post
 
-class PostAdapter(private val context: Context, private val posts: List<Post>) : BaseAdapter() {
+class MyEstateItemAdapter(private val context: Context, private val posts: List<Post>) : BaseAdapter() {
 
     override fun getCount(): Int = posts.size
 
@@ -18,7 +19,7 @@ class PostAdapter(private val context: Context, private val posts: List<Post>) :
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_mainpage, parent, false)
+        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.my_estate_item, parent, false)
         val post = posts[position]
 
         // Ánh xạ các thành phần từ itemPost.xml
@@ -30,9 +31,6 @@ class PostAdapter(private val context: Context, private val posts: List<Post>) :
         val price = view.findViewById<TextView>(R.id.price)
         val area = view.findViewById<TextView>(R.id.area)
         val address = view.findViewById<TextView>(R.id.address)
-        val userName = view.findViewById<TextView>(R.id.user_name)
-        val postTime = view.findViewById<TextView>(R.id.post_time)
-        val phoneNumber = view.findViewById<TextView>(R.id.phone_number)
 
         // Gán dữ liệu vào view
         mainImage.setImageResource(post.imageMain)
@@ -43,9 +41,6 @@ class PostAdapter(private val context: Context, private val posts: List<Post>) :
         price.text = post.price
         area.text = post.area
         address.text = post.location
-        userName.text = post.userName
-        postTime.text = post.postTime
-        phoneNumber.text = post.phoneNumber
 
         return view
     }

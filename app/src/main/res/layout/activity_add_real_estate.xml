@@ -7,203 +7,212 @@
     android:layout_height="match_parent"
     tools:context=".ui.AddRealEstateActivity">
 
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Title"
-        android:textFontWeight="500"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/titleEditText"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/edit_text_border"
-        android:padding="10dp"
+        android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/propertyTypeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Property Type"
-        android:textFontWeight="500"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
-
-
-    <Spinner
-        android:id="@+id/propertyTypeSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/spinner_background"
-        android:entries="@array/property_types"
-        android:padding="10dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/propertyTypeTextView" />
-
-
-    <TextView
-        android:id="@+id/locationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Location"
-        android:textFontWeight="500"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/propertyTypeSpinner" />
-
-    <EditText
-        android:id="@+id/locationEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/edit_text_border"
-        android:drawableEnd="@drawable/small_locate"
-        android:inputType="none"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationTextView" />
-
-    <TextView
-        android:id="@+id/priceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Price"
-        android:textFontWeight="500"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationEditText" />
-
-    <EditText
-        android:id="@+id/priceEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/edit_text_border"
-        android:drawableEnd="@drawable/vnd"
-        android:inputType="number"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
-
-    <TextView
-        android:id="@+id/sizeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Size"
-        android:textFontWeight="500"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceEditText" />
-
-    <EditText
-        android:id="@+id/sizeEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/edit_text_border"
-        android:drawableEnd="@drawable/metres"
-        android:inputType="number"
-        android:padding="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sizeTextView" />
-
-
-    <LinearLayout
-        android:id="@+id/bedroomsLinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sizeEditText">
 
         <TextView
+            android:id="@+id/titleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bedrooms"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Title"
             android:textFontWeight="500"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/bedroomsEditText"
-            android:layout_width="160dp"
+            android:id="@+id/titleEditText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/edit_text_border"
-            android:inputType="number"
-            android:padding="10dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintTop_toBottomOf="@+id/sizeEditText">
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
         <TextView
+            android:id="@+id/propertyTypeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bathrooms"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Property Type"
             android:textFontWeight="500"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleEditText" />
+
+
+        <Spinner
+            android:id="@+id/propertyTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/spinner_background"
+            android:entries="@array/property_types"
+            android:padding="10dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/propertyTypeTextView" />
+
+
+        <TextView
+            android:id="@+id/locationTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Location"
+            android:textFontWeight="500"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/propertyTypeSpinner" />
 
         <EditText
-            android:id="@+id/bathroomsEditText"
-            android:layout_width="160dp"
+            android:id="@+id/locationEditText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/edit_text_border"
+            android:drawableEnd="@drawable/small_locate"
+            android:inputType="none"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locationTextView" />
+
+        <TextView
+            android:id="@+id/priceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Price"
+            android:textFontWeight="500"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locationEditText" />
+
+        <EditText
+            android:id="@+id/priceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_border"
+            android:drawableEnd="@drawable/vnd"
             android:inputType="number"
-            android:padding="10dp" />
-    </LinearLayout>
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/priceTextView" />
 
-    <Button
-        android:id="@+id/addPropertyButton"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="125dp"
-        android:layout_marginEnd="16dp"
-        android:text="Add Location"
-        app:layout_constraintStart_toStartOf="parent"
+        <TextView
+            android:id="@+id/sizeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Size"
+            android:textFontWeight="500"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/priceEditText" />
 
-        app:layout_constraintTop_toBottomOf="@+id/sizeEditText" />
+        <EditText
+            android:id="@+id/sizeEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/edit_text_border"
+            android:drawableEnd="@drawable/metres"
+            android:inputType="number"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sizeTextView" />
+
+
+        <LinearLayout
+            android:id="@+id/bedroomsLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sizeEditText">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bedrooms"
+                android:textFontWeight="500"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/bedroomsEditText"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="number"
+                android:padding="10dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/sizeEditText">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bathrooms"
+                android:textFontWeight="500"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/bathroomsEditText"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="number"
+                android:padding="10dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/addPropertyButton"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="125dp"
+            android:layout_marginEnd="16dp"
+            android:text="Add Location"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@+id/sizeEditText" />
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
