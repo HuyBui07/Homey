@@ -29,7 +29,7 @@
             android:name=".ui.AddRealEstateActivity"
             android:exported="true" />
 
-        <activity android:name=".ui.SettingsActivity"
+        <activity android:name=".ui.MyEstatesActivity"
             android:exported="true" />
 
         <activity

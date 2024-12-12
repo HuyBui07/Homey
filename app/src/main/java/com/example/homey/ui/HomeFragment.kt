@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.homey.adapters.PostAdapter
 import com.example.homey.data.model.Post
 
 class HomeFragment : Fragment() {

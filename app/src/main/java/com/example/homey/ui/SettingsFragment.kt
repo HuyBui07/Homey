@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,6 +28,13 @@ class SettingsFragment : Fragment() {
 
         // Hide action bar
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
+
+        // Interactivity
+        val myEstatesButton = view.findViewById<LinearLayout>(R.id.myEstatesLinearLayout)
+        myEstatesButton.setOnClickListener {
+            val intent = Intent(activity, MyEstatesActivity::class.java)
+            startActivity(intent)
+        }
 
         return view
     }
