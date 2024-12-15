@@ -11,4 +11,5 @@ data class Estate(
     val bedrooms: Int,
     val bathrooms: Int,
     val ownerRef: DocumentReference,
+    val images: MutableList<String>
 )

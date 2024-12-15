@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.firebase.firestore)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.storage)
     implementation(libs.play.services.base)
     implementation(libs.play.services.maps)
     implementation(libs.androidx.activity)

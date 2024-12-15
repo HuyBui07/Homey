@@ -3,9 +3,12 @@ package com.example.homey.data.repository
 import com.example.homey.data.model.Estate
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class EstateRepository private constructor() {
     private val db = FirebaseFirestore.getInstance()
+    val storageRef = FirebaseStorage.getInstance().reference
 
     fun addEstate(estate: Estate, onComplete: (Boolean) -> Unit) {
         // Add estate to Firestore
