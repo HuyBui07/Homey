@@ -2,8 +2,7 @@ package com.example.homey.data.model
 
 import com.google.firebase.firestore.DocumentReference
 
-data class Estate(
-    var id: String?,
+data class AddingEstate(
     val title: String,
     val propertyType: String,
     val location: String,
@@ -14,5 +13,5 @@ data class Estate(
     val ownerRef: DocumentReference?,
     val images: MutableList<String>
 ) {
-    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, null, mutableListOf())
+    constructor() : this("", "", "", 0.0, 0.0, 0, 0, null, mutableListOf())
 }

@@ -46,6 +46,8 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.resumeWithException
 
+import com.example.homey.data.model.AddingEstate
+
 class AddRealEstateActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
 
@@ -105,6 +107,15 @@ class AddRealEstateActivity : AppCompatActivity() {
                         val clipData = data.clipData
                         if (clipData != null) {
                             for (i in 0 until clipData.itemCount) {
+                                if (imageUris.size == 4) {
+                                    addImagesButton.visibility = Button.GONE
+                                    Toast.makeText(
+                                        this,
+                                        "You can only select up to 4 images",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    break
+                                }
                                 val imageUri = clipData.getItemAt(i).uri
                                 imageUris.add(imageUri)
                                 newImagesUri.add(imageUri)
@@ -159,7 +170,8 @@ class AddRealEstateActivity : AppCompatActivity() {
                         removeImageButton.setOnClickListener {
                             imageUris.remove(imageUri)
                             imagesLinearLayout.removeView(itemView)
-                            addImagesButton.isEnabled = true
+                            addImagesButton.visibility = Button.VISIBLE
+                            imagesTextView.text = "Images (${imageUris.size}/4)"
                         }
 
                         imagesLinearLayout.addView(itemView)
@@ -223,16 +235,16 @@ class AddRealEstateActivity : AppCompatActivity() {
                     return@postDelayed
                 }
 
-                val estate = Estate(
-                    title = title,
-                    propertyType = propertyType,
-                    location = location,
-                    price = price,
-                    size = size,
-                    bedrooms = bedrooms,
-                    bathrooms = bathrooms,
-                    ownerRef = ownerRef,
-                    images = mutableListOf()
+                val estate = AddingEstate(
+                    title,
+                    propertyType,
+                    location,
+                    price,
+                    size,
+                    bedrooms,
+                    bathrooms,
+                    ownerRef,
+                    mutableListOf()
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {
@@ -255,6 +267,7 @@ class AddRealEstateActivity : AppCompatActivity() {
                             estateRepo.addEstate(estate) { isSuccess ->
                                 progressBar.visibility = FrameLayout.GONE
                                 if (isSuccess) {
+                                    setResult(RESULT_OK)
                                     finish()
                                 } else {
                                     showAlertDialog("Error", "Failed to add property")
@@ -266,8 +279,7 @@ class AddRealEstateActivity : AppCompatActivity() {
                         }
                     }
                 }
-                 // Adjust the delay as needed
-            }, 100) // Adjust the del
+            }, 100)
         }
     }
 
