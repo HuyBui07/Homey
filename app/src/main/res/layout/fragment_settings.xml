@@ -55,9 +55,9 @@
         app:layout_constraintTop_toBottomOf="@+id/settingsLinearLayout">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:gravity="center_vertical">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="40dp"
@@ -70,7 +70,8 @@
                     android:id="@+id/avatarImageView"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/default_avatar" />
+                    android:src="@drawable/default_avatar"
+                    android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
 
 
@@ -78,6 +79,7 @@
                 android:id="@+id/usernameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:text="Username"
                 android:textColor="@color/black"
@@ -86,8 +88,47 @@
                 app:layout_constraintStart_toEndOf="@+id/avatarImageView"
                 app:layout_constraintTop_toTopOf="@+id/avatarImageView" />
 
+            <FrameLayout
+                android:id="@+id/editFrameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background"
+                android:padding="8dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_edit" />
+
+            </FrameLayout>
+
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Email"
+            android:textColor="@color/black"
+            />
+
+        <TextView
+            android:id="@+id/phoneTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_phone"
+            android:drawablePadding="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Phone"
+            android:textColor="@color/black"
+            />
+
+
 
         <View
             android:layout_width="match_parent"
@@ -98,35 +139,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/settingsLinearLayout" />
 
-        <LinearLayout
-            android:id="@+id/accountLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
 
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/user_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:text="Account"
-                android:textColor="@color/black"
-                android:textFontWeight="800"
-                android:textSize="20sp" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/forward_icon" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/myEstatesLinearLayout"
@@ -160,6 +173,7 @@
 
 
         <LinearLayout
+            android:id="@+id/logOutLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 

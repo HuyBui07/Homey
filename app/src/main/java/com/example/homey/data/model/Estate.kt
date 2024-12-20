@@ -11,8 +11,8 @@ data class Estate(
     val size: Double,
     val bedrooms: Int,
     val bathrooms: Int,
-    val ownerRef: DocumentReference?,
+    val ownerUid: String,
     val images: MutableList<String>
 ) {
-    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, null, mutableListOf())
+    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, "", mutableListOf())
 }
