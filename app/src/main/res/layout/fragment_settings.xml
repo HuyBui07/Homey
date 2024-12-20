@@ -9,7 +9,6 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-
         android:background="@drawable/rounded_bottom_corners"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,9 +37,7 @@
             android:text="Settings"
             android:textColor="@color/white"
             android:textFontWeight="800"
-            android:textSize="28sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="28sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,9 +59,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settingsLinearLayout">
+                app:cardCornerRadius="20dp">
 
                 <ImageView
                     android:id="@+id/avatarImageView"
@@ -72,7 +67,6 @@
                     android:layout_height="40dp"
                     android:src="@drawable/default_avatar" />
             </androidx.cardview.widget.CardView>
-
 
             <TextView
                 android:id="@+id/usernameTextView"
@@ -82,10 +76,7 @@
                 android:text="Username"
                 android:textColor="@color/black"
                 android:textFontWeight="800"
-                android:textSize="20sp"
-                app:layout_constraintStart_toEndOf="@+id/avatarImageView"
-                app:layout_constraintTop_toTopOf="@+id/avatarImageView" />
-
+                android:textSize="20sp" />
 
         </LinearLayout>
 
@@ -93,10 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginVertical="16dp"
-            android:background="@color/lighter_gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/settingsLinearLayout" />
+            android:background="@color/lighter_gray" />
 
         <LinearLayout
             android:id="@+id/accountLinearLayout"
@@ -105,7 +93,6 @@
             android:layout_marginBottom="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
-
 
             <ImageView
                 android:layout_width="40dp"
@@ -136,7 +123,6 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -158,14 +144,12 @@
                 android:src="@drawable/forward_icon" />
         </LinearLayout>
 
-
         <LinearLayout
+            android:id="@+id/logoutLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:gravity="center_vertical"
             android:orientation="horizontal">
-
 
             <ImageView
                 android:layout_width="40dp"

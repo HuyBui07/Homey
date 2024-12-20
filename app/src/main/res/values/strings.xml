@@ -15,4 +15,14 @@
         <item>Condo</item>
         <item>Townhouse</item>
     </string-array>
+    <string-array name="gender_options">
+        <item>Nam</item>
+        <item>Nữ</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="account_type_options">
+        <item>Người mua/thuê</item>
+        <item>Người môi giới</item>
+    </string-array>
 </resources>
