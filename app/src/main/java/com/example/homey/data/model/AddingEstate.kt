@@ -10,8 +10,8 @@ data class AddingEstate(
     val size: Double,
     val bedrooms: Int,
     val bathrooms: Int,
-    val ownerRef: DocumentReference?,
+    val ownerUid: String,
     val images: MutableList<String>
 ) {
-    constructor() : this("", "", "", 0.0, 0.0, 0, 0, null, mutableListOf())
+    constructor() : this("", "", "", 0.0, 0.0, 0, 0, "", mutableListOf())
 }

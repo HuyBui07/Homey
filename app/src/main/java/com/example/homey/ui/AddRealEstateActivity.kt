@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.homey.R
-import com.example.homey.data.model.Estate
 import android.content.Intent
 import android.view.LayoutInflater
 import android.widget.ImageButton
@@ -47,6 +46,7 @@ import java.io.ByteArrayOutputStream
 import kotlin.coroutines.resumeWithException
 
 import com.example.homey.data.model.AddingEstate
+import com.example.homey.data.repository.UserRepository
 
 class AddRealEstateActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
@@ -200,7 +200,7 @@ class AddRealEstateActivity : AppCompatActivity() {
 
             // Delay the execution of database operations to ensure the progress bar is visible
             Handler(Looper.getMainLooper()).postDelayed({
-                val ownerRef = db.collection("users").document("qZ75wqytWzYGmI2M9OUO")
+                val ownerUid = UserRepository.getInstance().auth.currentUser?.uid
 
                 // Add property to Firestore
                 val title = findViewById<EditText>(R.id.titleEditText).text.toString()
@@ -243,7 +243,7 @@ class AddRealEstateActivity : AppCompatActivity() {
                     size,
                     bedrooms,
                     bathrooms,
-                    ownerRef,
+                    ownerUid!!,
                     mutableListOf()
                 )
 
