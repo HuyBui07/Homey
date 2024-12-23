@@ -2,6 +2,7 @@
 agp = "8.7.2"
 compiler = "4.11.0’"
 firebaseBom = "33.7.0"
+geofirestoreAndroid = "v1.5.0"
 glide = "4.11.0"
 glideVersion = "4.16.0"
 kotlin = "1.9.24"
@@ -26,12 +27,14 @@ places = "4.1.0"
 playServicesBase = "18.5.0"
 playServicesMaps = "19.0.0"
 playServicesMapsVersion = "17.0.0"
+playServicesLocation = "21.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
+geofirestore-android = { module = "com.github.imperiumlabs:GeoFirestore-Android", version.ref = "geofirestoreAndroid" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-v4160 = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,6 +54,7 @@ firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

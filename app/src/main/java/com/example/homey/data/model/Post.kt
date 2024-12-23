@@ -12,5 +12,6 @@ data class Post(
     val location: String,
     val userName: String,
     val postTime: String,
-    val phoneNumber: String
+    val phoneNumber: String,
+    var isFavorite: Boolean
 )

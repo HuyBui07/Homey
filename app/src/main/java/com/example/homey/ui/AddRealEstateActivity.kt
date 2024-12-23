@@ -68,6 +68,10 @@ class AddRealEstateActivity : AppCompatActivity() {
             insets
         }
 
+        // Address latitude and longitude
+        var lat = 0.0
+        var lon = 0.0
+
         // Set the title of the action bar
         supportActionBar?.title = "Add Real Estate"
 
@@ -85,6 +89,8 @@ class AddRealEstateActivity : AppCompatActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val data: Intent? = it.data
                     val location = data?.getStringExtra("location")
+                    lat = data?.getDoubleExtra("lat", 0.0)!!
+                    lon = data.getDoubleExtra("lon", 0.0)
                     if (location != null) locationEditTextView.setText(location)
                     else locationEditTextView.setText("Location not specified")
                 }
@@ -239,6 +245,8 @@ class AddRealEstateActivity : AppCompatActivity() {
                     title,
                     propertyType,
                     location,
+                    lat,
+                    lon,
                     price,
                     size,
                     bedrooms,

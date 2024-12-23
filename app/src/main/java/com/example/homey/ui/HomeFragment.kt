@@ -40,7 +40,8 @@ class HomeFragment : Fragment() {
                 "Quận 7, Hồ Chí Minh",
                 "Trương Đăng Nghĩa",
                 "Đăng hôm nay",
-                "037455****"
+                "037455****",
+                true
             ),
             Post(
                 R.drawable.small_image_1,
@@ -54,7 +55,8 @@ class HomeFragment : Fragment() {
                 "Quận 2, Hồ Chí Minh",
                 "Nguyễn Văn A",
                 "Đăng hôm qua",
-                "098765****"
+                "098765****",
+                false
             )
         )
 

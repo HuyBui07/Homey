@@ -1,9 +1,11 @@
 package com.example.homey.adapters
 
 import android.content.Context
+import android.graphics.drawable.AnimationDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
@@ -47,6 +49,18 @@ class PostAdapter(private val context: Context, private val posts: List<Post>) :
         userName.text = post.userName
         postTime.text = post.postTime
         phoneNumber.text = post.phoneNumber
+
+        // Interactivity
+        val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button)
+        var isFavorite = post.isFavorite
+        favoriteButton.setImageResource(if (isFavorite) R.drawable.favorite_icon_2 else R.drawable.favorite_icon)
+
+        favoriteButton.setOnClickListener {
+            isFavorite = !isFavorite
+            post.isFavorite = isFavorite
+            favoriteButton.setImageResource(if (isFavorite) R.drawable.favorite_icon_2 else R.drawable.favorite_icon)
+        }
+
 
         return view
     }

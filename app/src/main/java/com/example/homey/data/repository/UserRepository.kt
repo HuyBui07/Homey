@@ -111,6 +111,19 @@ class UserRepository private constructor() {
         }
     }
 
+    fun initializeUser() {
+        val uid = auth.currentUser?.uid
+        if (uid != null) {
+            db.collection("users").document(uid).get()
+                .addOnSuccessListener { document ->
+                    this.avatarUrl = document["avatarUrl"] as String
+                    this.username = document["username"] as String
+                    this.email = document["email"] as String
+                    this.phoneNumber = document["phoneNumber"] as String
+                }
+        }
+    }
+
     fun getImageUrl(): String? {
         return avatarUrl
     }

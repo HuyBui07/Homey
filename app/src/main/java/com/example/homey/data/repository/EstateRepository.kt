@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
 
 class EstateRepository private constructor() {
     private val db = FirebaseFirestore.getInstance()
@@ -23,11 +24,16 @@ class EstateRepository private constructor() {
             }
     }
 
-    fun getEstates(onComplete: (QuerySnapshot?) -> Unit) {
+    fun getEstates(onComplete: (List<Estate>?) -> Unit) {
         db.collection("estates")
             .get()
             .addOnSuccessListener { result ->
-                onComplete(result)
+                val estates = result.documents.mapNotNull { document ->
+                    document.toObject(Estate::class.java)?.apply {
+                        id = document.id
+                    }
+                }
+                onComplete(estates)
             }
             .addOnFailureListener { exception ->
                 // Handle the error
