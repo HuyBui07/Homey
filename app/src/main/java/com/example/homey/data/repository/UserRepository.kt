@@ -13,7 +13,6 @@ class UserRepository private constructor() {
     private var username: String? = null
     private var phoneNumber: String? = null
 
-
     fun signUpUser(
         avatarUrl: String,
         email: String,
@@ -32,7 +31,7 @@ class UserRepository private constructor() {
                             "email" to email,
                             "username" to username,
                             "phoneNumber" to phoneNumber,
-                            "avatarUrl" to avatarUrl
+                            "avatarUrl" to avatarUrl,
                         )
                         db.collection("users").document(uid).set(user)
                             .addOnSuccessListener {
