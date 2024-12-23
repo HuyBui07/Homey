@@ -17,16 +17,16 @@ import com.example.homey.data.model.Estate
 import com.example.homey.data.repository.EstateRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.example.homey.adapters.EstateAdapter
+import com.google.firebase.auth.FirebaseAuth
 
 class MyEstatesActivity : AppCompatActivity() {
     private val estateRepo = EstateRepository.getInstance()
     private lateinit var estateAdapter: EstateAdapter
+    private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val propUserUid = "qZ75wqytWzYGmI2M9OUO"
-
-            estateRepo.getEstatesByOwner(propUserUid) { estates ->
+            estateRepo.getEstatesByOwner(uid!!) { estates ->
                 if (estates != null) {
                     updateEstates(estates)
                 }
@@ -57,9 +57,7 @@ class MyEstatesActivity : AppCompatActivity() {
             startForResult.launch(intent)
         }
 
-        val propUserUid = "qZ75wqytWzYGmI2M9OUO"
-
-        estateRepo.getEstatesByOwner(propUserUid) { estates ->
+        estateRepo.getEstatesByOwner(uid!!) { estates ->
             if (estates != null) {
                 displayEstates(estates)
             }

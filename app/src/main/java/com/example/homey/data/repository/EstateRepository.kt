@@ -64,9 +64,8 @@ class EstateRepository private constructor() {
 
     fun getEstatesByOwner(userUid: String, onComplete: (List<Estate>?) -> Unit) {
         // Get estates by owner from Firestore
-        val userRef = db.collection("users").document(userUid)
         db.collection("estates")
-            .whereEqualTo("ownerRef", userRef)
+            .whereEqualTo("ownerUid", userUid)
             .get()
             .addOnSuccessListener { result ->
                 val estates = result.documents.mapNotNull { document ->
