@@ -9,6 +9,10 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="no_results_message">Không tìm thấy kết quả phù hợp.</string>
+    <string name="error_message">Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.</string>
+
+
     <string-array name="property_types">
         <item>House</item>
         <item>Apartment</item>

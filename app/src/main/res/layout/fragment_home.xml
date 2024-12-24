@@ -124,6 +124,20 @@
             android:id="@+id/itemPost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <!-- Hiển thị lỗi -->
+
+        <TextView
+            android:id="@+id/noResultsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="Không tìm thấy kết quả phù hợp."
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FF0000"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </RelativeLayout>

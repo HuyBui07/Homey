@@ -1,18 +1,30 @@
 package com.example.homey
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.example.homey.adapters.PostAdapter
+import com.example.homey.data.model.Estate
 import com.example.homey.data.model.Post
+import com.example.homey.data.repository.EstateRepository
+import com.example.homey.ui.SearchActivity
 
 class HomeFragment : Fragment() {
+    private lateinit var adapter: PostAdapter
+    private lateinit var searchBar: EditText
+    private lateinit var noResultsText: TextView
+    private val estateRepository = EstateRepository.getInstance()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,11 +70,22 @@ class HomeFragment : Fragment() {
             )
         )
 
-        val listView = view.findViewById<ListView>(R.id.itemPost)
+
         val adapter = PostAdapter(requireContext(), posts)
+        val listView = view.findViewById<ListView>(R.id.itemPost)
+        searchBar = view.findViewById(R.id.searchBar)
+        noResultsText = view.findViewById(R.id.noResultsText)
 
         listView.adapter = adapter
 
+        searchBar.setOnClickListener {
+            val intent = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(intent)
+        }
         return view
     }
+
+
+
+
 }

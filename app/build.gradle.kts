@@ -17,6 +17,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val mapsKey = project.findProperty("MAPS_KEY") as String? ?: "DUMMY_KEY"
+        manifestPlaceholders["MAPS_KEY"] = mapsKey
     }
 
     buildTypes {

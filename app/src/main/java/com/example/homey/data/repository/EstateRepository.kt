@@ -1,5 +1,6 @@
 package com.example.homey.data.repository
 
+import android.util.Log
 import com.example.homey.data.model.AddingEstate
 import com.example.homey.data.model.Estate
 import com.google.firebase.firestore.FirebaseFirestore
@@ -80,6 +81,28 @@ class EstateRepository private constructor() {
                 onComplete(null)
             }
     }
+
+    fun searchEstatesByName(query: String, onComplete: (List<Estate>) -> Unit) {
+        db.collection("estates")
+            .whereGreaterThanOrEqualTo("title", query)
+            .whereLessThanOrEqualTo("title", query + "\uf8ff")
+            .get()
+            .addOnSuccessListener { result ->
+                val estates = result.documents.mapNotNull { document ->
+                    document.toObject(Estate::class.java)?.apply {
+                        id = document.id
+                    }
+                }
+                onComplete(estates) // Luôn trả về danh sách, ngay cả khi rỗng
+            }
+            .addOnFailureListener { exception ->
+                // Log lỗi để debug dễ dàng hơn
+                Log.e("EstateRepository", "Error fetching estates: ${exception.message}", exception)
+                onComplete(emptyList()) // Trả về danh sách rỗng khi gặp lỗi
+            }
+    }
+
+
 
     companion object {
         @Volatile private var instance: EstateRepository? = null
