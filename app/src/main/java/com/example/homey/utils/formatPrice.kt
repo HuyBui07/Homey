@@ -2,8 +2,8 @@ package com.example.homey.utils
 
 fun formatPrice(price: Double): String {
     return if (price >= 1_000_000_000) {
-        "${price / 1_000_000_000} tỉ"
+        String.format("%.1f tỉ", price / 1_000_000_000)
     } else {
-        "${price / 1_000_000} triệu"
+        String.format("%.1f triệu", price / 1_000_000)
     }
 }

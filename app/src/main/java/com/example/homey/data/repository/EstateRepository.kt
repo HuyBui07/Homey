@@ -23,8 +23,8 @@ class EstateRepository private constructor() {
             }
     }
 
-    fun getEstates(latitude: Double, longitude: Double, onComplete: (List<Estate>?) -> Unit) {
-        val latLonRang = calculateLatLonRange(latitude, longitude, 10.0)
+    fun getEstates(latitude: Double, longitude: Double, radius: Double, onComplete: (List<Estate>?) -> Unit) {
+        val latLonRang = calculateLatLonRange(latitude, longitude, radius)
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
         db.collection("estates").whereGreaterThanOrEqualTo("lat", latLonRang.first.first)
@@ -87,6 +87,22 @@ class EstateRepository private constructor() {
             .addOnFailureListener { exception ->
                 // Handle the error
                 onComplete(null)
+            }
+    }
+
+    fun getEstateFurtherInformation(estateId: String, onComplete: (description: String?, frontage: Int?, orientation: String?, legalStatus: String?, furnishings: String?) -> Unit) {
+        // Get estate by ID from Firestore
+        db.collection("estates").document(estateId)
+            .get()
+            .addOnSuccessListener { document ->
+                val description = document.getString("description")
+                val frontage = document.getLong("frontage")?.toInt()
+                val orientation = document.getString("orientation")
+                val legalStatus = document.getString("legalStatus")
+                val furnishings = document.getString("furnishings")
+                onComplete(description, frontage, orientation, legalStatus, furnishings)
+            }
+            .addOnFailureListener { exception ->
             }
     }
 

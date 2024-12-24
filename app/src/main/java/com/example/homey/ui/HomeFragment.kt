@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ListView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,13 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var currentLocation: Location
     private lateinit var posts : MutableList<Post>
+    private lateinit var estateRepo: EstateRepository
+    private lateinit var userRepository: UserRepository
+
+    private lateinit var listView: ListView
+    private lateinit var adapter: PostAdapter
+    private var searchRadius = 10.0
+    private var isFetching = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +52,8 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         // Hide action bar
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-        val estateRepo = EstateRepository.getInstance()
-        val userRepository = UserRepository.getInstance()
+        estateRepo = EstateRepository.getInstance()
+        userRepository = UserRepository.getInstance()
 
         posts = mutableListOf<Post>()
 
@@ -54,52 +62,80 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
             LocationServices.getFusedLocationProviderClient(requireContext())
         getLastLocation { success ->
             if (success) {
-                estateRepo.getEstates(currentLocation.latitude, currentLocation.longitude) { estates ->
-                    if (estates != null) {
-                        for (estate in estates) {
-                            userRepository.getAvatarAndUsernameAndPhoneNumberAndFavoriteState(estate.ownerUid, estate.id!!) { success, avatar, username, phoneNumber, isFavorite ->
-                                if (success && username != null && phoneNumber != null && isFavorite != null && avatar != null) {
-                                    val post = Post(
-                                        estate.id!!,
-                                        estate.images[0],
-                                        estate.images[1],
-                                        estate.images[2],
-                                        estate.images[3],
-                                        estate.title,
-                                        estate.price,
-                                        estate.size,
-                                        estate.location,
-                                        avatar,
-                                        username,
-                                        phoneNumber,
-                                        estate.bedrooms,
-                                        estate.bathrooms,
-                                        estate.postTime,
-                                        isFavorite,
-                                    )
-                                    posts.add(post)
-                                }
-                                if (posts.size == estates.size) {
-                                    val listView = view.findViewById<ListView>(R.id.itemPost)
-                                    val adapter = PostAdapter(requireContext(), posts, this)
-                                    listView.adapter = adapter
-                                    adapter.notifyDataSetChanged()
-                                }
+                fetchEstates()
+            }
+        }
 
+        adapter = PostAdapter(requireContext(), posts, this)
+        listView = view.findViewById(R.id.itemPost)
+        listView.adapter = adapter
+
+        listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) {}
+
+            override fun onScroll(
+                view: AbsListView?,
+                firstVisibleItem: Int,
+                visibleItemCount: Int,
+                totalItemCount: Int
+            ) {
+                if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount > 0 && searchRadius < 100.0) {
+                    Log.d("HomeFragment", "Fetching more estates at radius $searchRadius")
+                    if (isFetching) return
+                    searchRadius += 10.0
+                    fetchEstates()
+                }
+            }
+        })
+
+        return view
+    }
+
+    private fun fetchEstates() {
+        isFetching = true
+        estateRepo.getEstates(currentLocation.latitude, currentLocation.longitude, searchRadius) { estates ->
+            if (!estates.isNullOrEmpty()) {
+                Log.d("HomeFragment", "Fetched estates at radius $searchRadius: $estates ")
+                val newPosts = mutableListOf<Post>()
+                var newEstatesSize = estates.size
+                for (estate in estates) {
+                    if (posts.none { it.id == estate.id }) {
+                        userRepository.getAvatarAndUsernameAndPhoneNumberAndFavoriteState(estate.ownerUid, estate.id!!) { success, avatar, username, phoneNumber, isFavorite ->
+                            if (success && username != null && phoneNumber != null && isFavorite != null && avatar != null) {
+                                val post = Post(
+                                    estate.id!!,
+                                    estate.images[0],
+                                    estate.images[1],
+                                    estate.images[2],
+                                    estate.images[3],
+                                    estate.title,
+                                    estate.price,
+                                    estate.size,
+                                    estate.location,
+                                    avatar,
+                                    username,
+                                    phoneNumber,
+                                    estate.bedrooms,
+                                    estate.bathrooms,
+                                    estate.postTime,
+                                    isFavorite,
+                                )
+                                newPosts.add(post)
+                            }
+                            if (newPosts.size == newEstatesSize) {
+                                activity?.runOnUiThread {
+                                    posts.addAll(newPosts)
+                                    adapter.notifyDataSetChanged()
+                                    isFetching = false
+                                }
                             }
                         }
+                    } else {
+                        newEstatesSize--
                     }
                 }
             }
         }
-
-        val listView = view.findViewById<ListView>(R.id.itemPost)
-        val adapter = PostAdapter(requireContext(), posts, this)
-
-        listView.adapter = adapter
-        adapter.notifyDataSetChanged()
-
-        return view
     }
 
     override fun onFavoriteButtonClicked(postId: String) {

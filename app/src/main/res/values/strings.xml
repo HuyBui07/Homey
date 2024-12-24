@@ -17,4 +17,14 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="orientations">
+        <item>North</item>
+        <item>South</item>
+        <item>East</item>
+        <item>West</item>
+        <item>North-East</item>
+        <item>North-West</item>
+        <item>South-East</item>
+        <item>South-West</item>
+    </string-array>
 </resources>
