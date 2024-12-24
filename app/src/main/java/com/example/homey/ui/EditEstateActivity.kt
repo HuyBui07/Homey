@@ -59,7 +59,11 @@ class EditEstateActivity : AppCompatActivity() {
     private lateinit var sizeEditText: EditText
     private lateinit var bedroomsEditText: EditText
     private lateinit var bathroomsEditText: EditText
-
+    private lateinit var descriptionEditText: EditText
+    private lateinit var frontageEditText: EditText
+    private lateinit var orientationSpinner: Spinner
+    private lateinit var legalStatusEditText: EditText
+    private lateinit var furnishingsEditText: EditText
     private lateinit var addImagesButton: Button
     private lateinit var progressBar: FrameLayout
 
@@ -90,9 +94,16 @@ class EditEstateActivity : AppCompatActivity() {
         sizeEditText = findViewById<EditText>(R.id.sizeEditText)
         bedroomsEditText = findViewById<EditText>(R.id.bedroomsEditText)
         bathroomsEditText = findViewById<EditText>(R.id.bathroomsEditText)
+        descriptionEditText = findViewById<EditText>(R.id.descriptionEditText)
+        frontageEditText = findViewById<EditText>(R.id.frontageEditText)
+        orientationSpinner = findViewById<Spinner>(R.id.orientationSpinner)
+        legalStatusEditText = findViewById<EditText>(R.id.legalStatusEditText)
+        furnishingsEditText = findViewById<EditText>(R.id.furnishingsEditText)
+
 
         val estateId = intent.getStringExtra("estateId")
         val estateTitle = intent.getStringExtra("estateTitle")
+        val estatePropertyType = intent.getStringExtra("estatePropertyType")
         val estatePrice = intent.getDoubleExtra("estatePrice", 0.0)
         val estateSize = intent.getDoubleExtra("estateSize", 0.0)
         val estateLocation = intent.getStringExtra("estateLocation")
@@ -101,11 +112,28 @@ class EditEstateActivity : AppCompatActivity() {
         val estateImages = intent.getStringArrayListExtra("estateImages")
 
         titleEditText.setText(estateTitle)
-        priceEditText.setText(estatePrice.toString())
+        propertyTypeSpinner.setSelection(
+            resources.getStringArray(R.array.property_types).indexOf(
+                estatePropertyType
+            )
+        )
+        priceEditText.setText(String.format("%.0f", estatePrice))
         sizeEditText.setText(estateSize.toString())
         locationEditText.setText(estateLocation)
         bedroomsEditText.setText(estateBedrooms.toString())
         bathroomsEditText.setText(estateBathrooms.toString())
+
+        estateRepo.getEstateFurtherInformation(estateId!!) { description, frontage, orientation, legalStatus, furnishings ->
+            if (description != null && frontage != null && orientation != null && legalStatus != null && furnishings != null) {
+                descriptionEditText.setText(description)
+                frontageEditText.setText(frontage.toString())
+                orientationSpinner.setSelection(
+                    resources.getStringArray(R.array.orientations).indexOf(orientation)
+                )
+                legalStatusEditText.setText(legalStatus)
+                furnishingsEditText.setText(furnishings)
+            }
+        }
 
         val newlyAddedImages = mutableListOf<Uri>()
         val deletedImagesUrl = mutableListOf<String>()
@@ -270,6 +298,11 @@ class EditEstateActivity : AppCompatActivity() {
                 val size = sizeEditText.text.toString().toDouble()
                 val bedrooms = bedroomsEditText.text.toString().toInt()
                 val bathrooms = bathroomsEditText.text.toString().toInt()
+                val description = descriptionEditText.text.toString()
+                val frontage = frontageEditText.text.toString().toInt()
+                val orientation = orientationSpinner.selectedItem.toString()
+                val legalStatus = legalStatusEditText.text.toString()
+                val furnishings = furnishingsEditText.text.toString()
 
                 if (title.isEmpty() || location.isEmpty()) {
                     showAlertDialog("Error", "Title and Location are required")
@@ -284,13 +317,21 @@ class EditEstateActivity : AppCompatActivity() {
                     return@postDelayed
                 }
 
+                if (description.isEmpty() || frontage <= 0 || legalStatus.isEmpty() || furnishings.isEmpty()) {
+                    showAlertDialog(
+                        "Error",
+                        "Description, Frontage, Legal Status, and Furnishings are required"
+                    )
+                    return@postDelayed
+                }
+
                 if (newlyAddedImages.size + estateImages!!.size > 4) {
                     showAlertDialog("Error", "You can only add up to 4 images")
                     return@postDelayed
                 }
 
                 // Delete the images that were removed
-                deleteImage(estateId!!, deletedImagesUrl)
+                deleteImage(estateId, deletedImagesUrl)
 
                 // Upload the newly added images
                 CoroutineScope(Dispatchers.IO).launch {
@@ -317,6 +358,11 @@ class EditEstateActivity : AppCompatActivity() {
                             "size" to size,
                             "bedrooms" to bedrooms,
                             "bathrooms" to bathrooms,
+                            "description" to description,
+                            "frontage" to frontage,
+                            "orientation" to orientation,
+                            "legalStatus" to legalStatus,
+                            "furnishings" to furnishings,
                             "images" to newImages
                         )
 

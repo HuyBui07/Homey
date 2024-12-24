@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/type_apartment"
+        android:title="Căn hộ chung cư" />
+    <item
+        android:id="@+id/type_house"
+        android:title="Nhà bán" />
+</menu>

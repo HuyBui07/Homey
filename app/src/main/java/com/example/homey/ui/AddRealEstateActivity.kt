@@ -219,8 +219,13 @@ class AddRealEstateActivity : AppCompatActivity() {
                 val sizeText = findViewById<EditText>(R.id.sizeEditText).text.toString()
                 val bedroomsText = findViewById<EditText>(R.id.bedroomsEditText).text.toString()
                 val bathroomsText = findViewById<EditText>(R.id.bathroomsEditText).text.toString()
+                val description = findViewById<EditText>(R.id.descriptionEditText).text.toString()
+                val frontage = findViewById<EditText>(R.id.frontageEditText).text.toString()
+                val orientation = findViewById<Spinner>(R.id.orientationSpinner).selectedItem.toString()
+                val legalStatus = findViewById<EditText>(R.id.legalStatusEditText).text.toString()
+                val furnishings = findViewById<EditText>(R.id.furnishingsEditText).text.toString()
 
-                if (title.isEmpty() || location.isEmpty() || priceText.isEmpty() || sizeText.isEmpty() || bedroomsText.isEmpty() || bathroomsText.isEmpty()) {
+                if (title.isEmpty() || location.isEmpty() || priceText.isEmpty() || sizeText.isEmpty() || bedroomsText.isEmpty() || bathroomsText.isEmpty() || description.isEmpty() || frontage.isEmpty() || orientation.isEmpty() || legalStatus.isEmpty() || furnishings.isEmpty()) {
                     progressBar.visibility = FrameLayout.GONE
                     showAlertDialog("Error", "Please fill in all fields")
                     return@postDelayed
@@ -258,7 +263,12 @@ class AddRealEstateActivity : AppCompatActivity() {
                     bathrooms,
                     ownerUid!!,
                     mutableListOf(),
-                    dateString
+                    dateString,
+                    description,
+                    frontage.toInt(),
+                    orientation,
+                    legalStatus,
+                    furnishings
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {
