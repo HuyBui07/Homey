@@ -64,7 +64,6 @@ class EditEstateActivity : AppCompatActivity() {
     private lateinit var orientationSpinner: Spinner
     private lateinit var legalStatusEditText: EditText
     private lateinit var furnishingsEditText: EditText
-
     private lateinit var addImagesButton: Button
     private lateinit var progressBar: FrameLayout
 

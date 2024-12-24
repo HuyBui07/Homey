@@ -56,6 +56,7 @@ class FavoriteFragment : Fragment(), PostAdapter.PostAdapterCallback {
                                 estate.images[2],
                                 estate.images[3],
                                 estate.title,
+                                estate.propertyType,
                                 estate.price,
                                 estate.size,
                                 estate.location,
@@ -65,6 +66,11 @@ class FavoriteFragment : Fragment(), PostAdapter.PostAdapterCallback {
                                 estate.bedrooms,
                                 estate.bathrooms,
                                 estate.postTime,
+                                estate.description,
+                                estate.frontage,
+                                estate.orientation,
+                                estate.legalStatus,
+                                estate.furnishings,
                                 isFavorite,
                             )
                             posts.add(post)

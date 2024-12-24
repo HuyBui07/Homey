@@ -9,11 +9,14 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="price_format">%1$d VND</string>
+    <string name="area_format">%1$d m²</string>
     <string-array name="property_types">
-        <item>House</item>
-        <item>Apartment</item>
-        <item>Condo</item>
-        <item>Townhouse</item>
+        <item>Tất cả nhà đất</item>
+        <item>Căn hộ chung cư</item>
+        <item>Nhà bán</item>
+        <item>Đất bán</item>
+        <item>Khác</item>
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

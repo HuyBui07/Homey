@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.homey.ui.AddRealEstateActivity
+import com.example.homey.ui.HomeFragment
 import com.example.homey.ui.FavoriteFragment
 import com.example.homey.ui.SettingsFragment
 

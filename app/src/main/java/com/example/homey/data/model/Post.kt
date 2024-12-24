@@ -7,6 +7,7 @@ data class Post(
     val smallImage2: String,
     val smallImage3: String,
     val title: String,
+    val propertyType: String,
     val price: Double,
     val area: Double,
     val location: String,
@@ -16,5 +17,10 @@ data class Post(
     val bedrooms: Int,
     val bathrooms: Int,
     val postTime: String,
+    val description: String,
+    val frontage: Double,
+    val orientation: String,
+    val legalStatus: String,
+    val furnishings: String,
     var isFavorite: Boolean
 )

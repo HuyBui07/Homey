@@ -13,7 +13,12 @@ data class Estate(
     val bathrooms: Int,
     val ownerUid: String,
     val images: MutableList<String>,
-    val postTime: String
+    val postTime: String,
+    val description: String,
+    val frontage: Double,
+    val orientation: String,
+    val legalStatus: String,
+    val furnishings: String,
 ) {
-    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, "", mutableListOf(), "")
+    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, "", mutableListOf(), "", "", 0.0, "", "", "")
 }
