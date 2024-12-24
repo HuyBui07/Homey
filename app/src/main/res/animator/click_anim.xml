@@ -1,0 +1,43 @@
+<!-- res/animator/click_animation.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueFrom="1.0"
+                android:valueTo="0.95"
+                android:duration="100" />
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueFrom="1.0"
+                android:valueTo="0.95"
+                android:duration="100" />
+            <objectAnimator
+                android:propertyName="backgroundColor"
+                android:valueFrom="#F9F9F9"
+                android:valueTo="#E0E0E0"
+                android:duration="500"
+                 />
+        </set>
+    </item>
+    <item>
+        <set>
+            <objectAnimator
+                android:propertyName="scaleX"
+                android:valueFrom="0.95"
+                android:valueTo="1.0"
+                android:duration="100" />
+            <objectAnimator
+                android:propertyName="scaleY"
+                android:valueFrom="0.95"
+                android:valueTo="1.0"
+                android:duration="100" />
+            <objectAnimator
+                android:propertyName="backgroundColor"
+                android:valueFrom="#E0E0E0"
+                android:valueTo="#F9F9F9"
+                android:duration="500"
+                />
+        </set>
+    </item>
+</selector>

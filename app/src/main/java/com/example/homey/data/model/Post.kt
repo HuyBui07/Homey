@@ -1,16 +1,20 @@
 package com.example.homey.data.model
 
 data class Post(
-    val imageMain: Int,
-    val smallImage1: Int,
-    val smallImage2: Int,
-    val smallImage3: Int,
+    val id: String,
+    val imageMain: String,
+    val smallImage1:String,
+    val smallImage2: String,
+    val smallImage3: String,
     val title: String,
-    val price: String,
-    val area: String,
-    val pricePerArea: String,
+    val price: Double,
+    val area: Double,
     val location: String,
+    val avatar: String,
     val userName: String,
+    val phoneNumber: String,
+    val bedrooms: Int,
+    val bathrooms: Int,
     val postTime: String,
-    val phoneNumber: String
+    var isFavorite: Boolean
 )

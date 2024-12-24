@@ -47,6 +47,8 @@ import kotlin.coroutines.resumeWithException
 
 import com.example.homey.data.model.AddingEstate
 import com.example.homey.data.repository.UserRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AddRealEstateActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
@@ -68,6 +70,10 @@ class AddRealEstateActivity : AppCompatActivity() {
             insets
         }
 
+        // Address latitude and longitude
+        var lat = 0.0
+        var lon = 0.0
+
         // Set the title of the action bar
         supportActionBar?.title = "Add Real Estate"
 
@@ -85,6 +91,8 @@ class AddRealEstateActivity : AppCompatActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val data: Intent? = it.data
                     val location = data?.getStringExtra("location")
+                    lat = data?.getDoubleExtra("lat", 0.0)!!
+                    lon = data.getDoubleExtra("lon", 0.0)
                     if (location != null) locationEditTextView.setText(location)
                     else locationEditTextView.setText("Location not specified")
                 }
@@ -235,16 +243,22 @@ class AddRealEstateActivity : AppCompatActivity() {
                     return@postDelayed
                 }
 
+                val currentDate = LocalDate.now()
+                val dateString = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+
                 val estate = AddingEstate(
                     title,
                     propertyType,
                     location,
+                    lat,
+                    lon,
                     price,
                     size,
                     bedrooms,
                     bathrooms,
                     ownerUid!!,
-                    mutableListOf()
+                    mutableListOf(),
+                    dateString
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {

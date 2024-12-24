@@ -24,15 +24,16 @@ class MyEstatesActivity : AppCompatActivity() {
     private lateinit var estateAdapter: EstateAdapter
     private val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            estateRepo.getEstatesByOwner(uid!!) { estates ->
-                if (estates != null) {
-                    updateEstates(estates)
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                estateRepo.getEstatesByOwner(uid!!) { estates ->
+                    if (estates != null) {
+                        updateEstates(estates)
+                    }
                 }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +90,10 @@ class MyEstatesActivity : AppCompatActivity() {
     }
 
     private fun updateEstates(estates: List<Estate>) {
-        estateAdapter.updateEstates(estates)
+        if (::estateAdapter.isInitialized) {
+            estateAdapter.updateEstates(estates)
+        } else {
+            displayEstates(estates)
+        }
     }
 }
