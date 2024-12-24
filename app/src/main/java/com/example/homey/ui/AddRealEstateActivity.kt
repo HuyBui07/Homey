@@ -47,6 +47,8 @@ import kotlin.coroutines.resumeWithException
 
 import com.example.homey.data.model.AddingEstate
 import com.example.homey.data.repository.UserRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AddRealEstateActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
@@ -68,6 +70,10 @@ class AddRealEstateActivity : AppCompatActivity() {
             insets
         }
 
+        // Address latitude and longitude
+        var lat = 0.0
+        var lon = 0.0
+
         // Set the title of the action bar
         supportActionBar?.title = "Add Real Estate"
 
@@ -85,6 +91,8 @@ class AddRealEstateActivity : AppCompatActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val data: Intent? = it.data
                     val location = data?.getStringExtra("location")
+                    lat = data?.getDoubleExtra("lat", 0.0)!!
+                    lon = data.getDoubleExtra("lon", 0.0)
                     if (location != null) locationEditTextView.setText(location)
                     else locationEditTextView.setText("Location not specified")
                 }
@@ -211,8 +219,13 @@ class AddRealEstateActivity : AppCompatActivity() {
                 val sizeText = findViewById<EditText>(R.id.sizeEditText).text.toString()
                 val bedroomsText = findViewById<EditText>(R.id.bedroomsEditText).text.toString()
                 val bathroomsText = findViewById<EditText>(R.id.bathroomsEditText).text.toString()
+                val description = findViewById<EditText>(R.id.descriptionEditText).text.toString()
+                val frontage = findViewById<EditText>(R.id.frontageEditText).text.toString()
+                val orientation = findViewById<Spinner>(R.id.orientationSpinner).selectedItem.toString()
+                val legalStatus = findViewById<EditText>(R.id.legalStatusEditText).text.toString()
+                val furnishings = findViewById<EditText>(R.id.furnishingsEditText).text.toString()
 
-                if (title.isEmpty() || location.isEmpty() || priceText.isEmpty() || sizeText.isEmpty() || bedroomsText.isEmpty() || bathroomsText.isEmpty()) {
+                if (title.isEmpty() || location.isEmpty() || priceText.isEmpty() || sizeText.isEmpty() || bedroomsText.isEmpty() || bathroomsText.isEmpty() || description.isEmpty() || frontage.isEmpty() || orientation.isEmpty() || legalStatus.isEmpty() || furnishings.isEmpty()) {
                     progressBar.visibility = FrameLayout.GONE
                     showAlertDialog("Error", "Please fill in all fields")
                     return@postDelayed
@@ -235,16 +248,27 @@ class AddRealEstateActivity : AppCompatActivity() {
                     return@postDelayed
                 }
 
+                val currentDate = LocalDate.now()
+                val dateString = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+
                 val estate = AddingEstate(
                     title,
                     propertyType,
                     location,
+                    lat,
+                    lon,
                     price,
                     size,
                     bedrooms,
                     bathrooms,
                     ownerUid!!,
-                    mutableListOf()
+                    mutableListOf(),
+                    dateString,
+                    description,
+                    frontage.toInt(),
+                    orientation,
+                    legalStatus,
+                    furnishings
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {

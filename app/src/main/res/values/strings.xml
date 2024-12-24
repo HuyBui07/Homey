@@ -9,14 +9,27 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="price_format">%1$d VND</string>
+    <string name="area_format">%1$d m²</string>
     <string name="no_results_message">Không tìm thấy kết quả phù hợp.</string>
     <string name="error_message">Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.</string>
-
-
     <string-array name="property_types">
-        <item>House</item>
-        <item>Apartment</item>
-        <item>Condo</item>
-        <item>Townhouse</item>
+        <item>Tất cả nhà đất</item>
+        <item>Căn hộ chung cư</item>
+        <item>Nhà bán</item>
+        <item>Đất bán</item>
+        <item>Khác</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="orientations">
+        <item>North</item>
+        <item>South</item>
+        <item>East</item>
+        <item>West</item>
+        <item>North-East</item>
+        <item>North-West</item>
+        <item>South-East</item>
+        <item>South-West</item>
     </string-array>
 </resources>

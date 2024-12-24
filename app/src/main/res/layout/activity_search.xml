@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Thanh tìm kiếm -->
         <EditText
@@ -19,14 +19,13 @@
             android:background="@drawable/search_bar_main"
             android:drawableStart="@android:drawable/ic_menu_search"
             android:inputType="text"
+            android:layout_margin="16dp"
             android:drawablePadding="8dp" />
 
-        <!-- Kết quả tìm kiếm -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchResults"
+        <ListView
+            android:id="@+id/itemPost"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content" />
 
         <!-- Thông báo không tìm thấy kết quả -->
         <TextView
