@@ -12,7 +12,8 @@ data class Estate(
     val bedrooms: Int,
     val bathrooms: Int,
     val ownerUid: String,
-    val images: MutableList<String>
+    val images: MutableList<String>,
+    val postTime: String
 ) {
-    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, "", mutableListOf())
+    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, "", mutableListOf(), "")
 }

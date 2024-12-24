@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.homey.R
 import com.example.homey.data.model.Estate
 import com.example.homey.ui.EditEstateActivity
+import com.example.homey.utils.formatPrice
 
 class EstateAdapter(private var estates: List<Estate>, private val startForResult: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EstateAdapter.EstateViewHolder>() {
 
@@ -24,6 +25,8 @@ class EstateAdapter(private var estates: List<Estate>, private val startForResul
         val price: TextView = itemView.findViewById(R.id.price)
         val area: TextView = itemView.findViewById(R.id.area)
         val address: TextView = itemView.findViewById(R.id.address)
+        val bedrooms: TextView = itemView.findViewById(R.id.bedroom)
+        val bathrooms: TextView = itemView.findViewById(R.id.bathroom)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstateViewHolder {
@@ -49,6 +52,9 @@ class EstateAdapter(private var estates: List<Estate>, private val startForResul
         holder.price.text = formatPrice(estate.price)
         holder.area.text = estate.size.toInt().toString() + " m²"
         holder.address.text = estate.location
+        holder.bedrooms.text = estate.bedrooms.toString()
+        holder.bathrooms.text = estate.bathrooms.toString()
+
 
         holder.itemView.setOnClickListener {
             // Handle the click event
@@ -72,11 +78,5 @@ class EstateAdapter(private var estates: List<Estate>, private val startForResul
         notifyDataSetChanged()
     }
 
-    fun formatPrice(price: Double): String {
-        return if (price >= 1_000_000_000) {
-            "${price / 1_000_000_000} tỉ"
-        } else {
-            "${price / 1_000_000} triệu"
-        }
-    }
+
 }

@@ -81,7 +81,7 @@
             android:id="@+id/price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:text="3.8 tỷ"
             android:textColor="#50A1FE"
             android:textSize="14sp"
@@ -91,7 +91,7 @@
             android:id="@+id/area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:text="53 m²"
             android:textColor="#50A1FE"
             android:textSize="14sp"
@@ -99,12 +99,11 @@
 
         <TextView
             android:id="@+id/pricePerArea"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="71,7 triệu/m²"
             android:textColor="#8B8989"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/bedroom"
@@ -112,8 +111,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableEnd="@drawable/bed_icon"
+            android:drawablePadding="10dp"
             android:text="3"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textColor="#8B8989"
             android:textSize="14sp" />
 
@@ -123,8 +123,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableEnd="@drawable/bathtub_icon"
+            android:drawablePadding="10dp"
             android:text="2"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textColor="#8B8989"
             android:textSize="14sp" />
 

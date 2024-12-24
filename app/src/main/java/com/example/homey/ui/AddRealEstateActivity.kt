@@ -47,6 +47,8 @@ import kotlin.coroutines.resumeWithException
 
 import com.example.homey.data.model.AddingEstate
 import com.example.homey.data.repository.UserRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AddRealEstateActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
@@ -241,6 +243,9 @@ class AddRealEstateActivity : AppCompatActivity() {
                     return@postDelayed
                 }
 
+                val currentDate = LocalDate.now()
+                val dateString = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+
                 val estate = AddingEstate(
                     title,
                     propertyType,
@@ -252,7 +257,8 @@ class AddRealEstateActivity : AppCompatActivity() {
                     bedrooms,
                     bathrooms,
                     ownerUid!!,
-                    mutableListOf()
+                    mutableListOf(),
+                    dateString
                 )
 
                 CoroutineScope(Dispatchers.IO).launch {

@@ -42,24 +42,13 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 class SignupActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
-    private lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_signup)
 
-        auth = FirebaseAuth.getInstance()
-        userRepository = UserRepository.getInstance()
 
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            userRepository.initializeUser()
-            val intent = Intent(this, MainPage::class.java)
-            startActivity(intent)
-            finish()
-        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

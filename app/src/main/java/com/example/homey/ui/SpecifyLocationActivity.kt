@@ -13,7 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.getCurrentLocation
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.homey.R
@@ -122,8 +121,6 @@ class SpecifyLocationActivity : AppCompatActivity(), OnMapReadyCallback {
             finish()
         }
     }
-
-
 
     private fun getLastLocation() {
         val locationPermissionRequest = registerForActivityResult(

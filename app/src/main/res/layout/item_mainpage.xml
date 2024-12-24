@@ -82,7 +82,7 @@
             android:id="@+id/price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:text="3.8 tỷ"
             android:textColor="#50A1FE"
             android:textSize="14sp"
@@ -92,7 +92,7 @@
             android:id="@+id/area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.1"
             android:text="53 m²"
             android:textColor="#50A1FE"
             android:textSize="14sp"
@@ -100,12 +100,12 @@
 
         <TextView
             android:id="@+id/pricePerArea"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="71,7 triệu/m²"
+            android:textAlignment="center"
             android:textColor="#8B8989"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/bedroom"
@@ -113,8 +113,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableEnd="@drawable/bed_icon"
+            android:drawablePadding="11dp"
             android:text="3"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textColor="#8B8989"
             android:textSize="14sp" />
 
@@ -124,8 +125,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:drawableEnd="@drawable/bathtub_icon"
+            android:drawablePadding="11dp"
             android:text="2"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textColor="#8B8989"
             android:textSize="14sp" />
     </LinearLayout>
@@ -150,6 +152,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/address">
@@ -158,7 +161,7 @@
             android:id="@+id/avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/avatar_bg"
+            android:src="@drawable/default_avatar"
             android:scaleType="centerCrop" />
 
         <LinearLayout
@@ -187,6 +190,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/call_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/callbutton_bg"
