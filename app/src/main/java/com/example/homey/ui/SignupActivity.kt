@@ -48,8 +48,6 @@ class SignupActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_signup)
 
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -125,9 +123,9 @@ class SignupActivity : AppCompatActivity() {
                 val phoneNumber = phoneNumberEditText.text.toString()
                 val imageUri = avatarImageView.tag as? Uri
 
-                if (email.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() || imageUri == null) {
+                if (email.isEmpty() || password.isEmpty() || phoneNumber.isEmpty()) {
                     progressBar.visibility = FrameLayout.GONE
-                    showAlertDialog("Error", "Please fill in all the fields.")
+                    showAlertDialog("Error", "Please fill in all the required fields.")
                     return@postDelayed
                 }
 
@@ -139,48 +137,42 @@ class SignupActivity : AppCompatActivity() {
                 }
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val uploadJob =
-                        async {
+                    val avatarUrl = if (imageUri != null) {
+                        val uploadJob = async {
                             val bitmap = getBitmapFromUri(this@SignupActivity, imageUri)
-                            if (bitmap != null) {
-                                uploadBitmapToFirebaseStorage(bitmap)
+                            if (bitmap != null) uploadBitmapToFirebaseStorage(bitmap) else null
+                        }
+                        uploadJob.await()
+                    } else {
+                        "https://example.com/default-avatar.png" // URL ảnh đại diện mặc định
+                    }
+
+                    UserRepository.getInstance()
+                        .signUpUser(avatarUrl ?: "https://example.com/default-avatar.png", email, password, username, phoneNumber) { success, uid ->
+
+                        if (success) {
+                                val user = UserRepository.getInstance().auth.currentUser
+                                user?.sendEmailVerification()?.addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        showAlertDialogAndNavigate(
+                                            "Success",
+                                            "Please check your email to confirm your account!",
+                                            this@SignupActivity,
+                                            LoginActivity::class.java
+                                        )
+                                    } else {
+                                        progressBar.visibility = FrameLayout.GONE
+                                        showAlertDialog(
+                                            "Error",
+                                            "Failed to send verification email."
+                                        )
+                                    }
+                                }
                             } else {
-                                null
+                                progressBar.visibility = FrameLayout.GONE
+                                showAlertDialog("Error", "Failed to sign up.")
                             }
                         }
-
-
-                    val avatarUrl = uploadJob.await()
-                    if (avatarUrl != null) {
-                        UserRepository.getInstance()
-                            .signUpUser(avatarUrl, email, password, username, phoneNumber) { success, uid ->
-                                if (success) {
-                                    val user = UserRepository.getInstance().auth.currentUser
-                                    user?.sendEmailVerification()?.addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            showAlertDialogAndNavigate(
-                                                "Success",
-                                                "Please check your email to confirm your account!",
-                                                this@SignupActivity,
-                                                LoginActivity::class.java
-                                            )
-                                        } else {
-                                            progressBar.visibility = FrameLayout.GONE
-                                            showAlertDialog(
-                                                "Error",
-                                                "Failed to send verification email."
-                                            )
-                                        }
-                                    }
-                                } else {
-                                    progressBar.visibility = FrameLayout.GONE
-                                    showAlertDialog("Error", "Failed to sign up.")
-                                }
-                            }
-                    } else {
-                        progressBar.visibility = FrameLayout.GONE
-                        showAlertDialog("Error", "Failed to upload avatar.")
-                    }
                 }
             }, 100)
         }

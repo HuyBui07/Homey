@@ -5,5 +5,5 @@ data class User(
     val password: String,
     val username: String,
     val phoneNumber: String,
-    val avatarUrl: String,
+    val avatarUrl: String = "https://example.com/default-avatar.png",
 )
