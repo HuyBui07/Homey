@@ -58,7 +58,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/detail_title2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -78,10 +78,10 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@id/detail_title2">
 
         <TextView
-            android:id="@+id/price"
+            android:id="@+id/detail_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -91,7 +91,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/area"
+            android:id="@+id/detail_area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -101,7 +101,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/pricePerArea"
+            android:id="@+id/detail_pricePerArea"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -110,7 +110,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/bedroom"
+            android:id="@+id/detail_bedroom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -121,7 +121,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/bathroom"
+            android:id="@+id/detail_bathroom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

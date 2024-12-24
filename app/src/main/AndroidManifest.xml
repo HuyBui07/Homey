@@ -31,6 +31,8 @@
 
         <activity android:name=".ui.MyEstatesActivity"
             android:exported="true" />
+        <activity android:name=".ui.DetailEstateActivity"
+            android:exported="true"/>
 
         <activity
             android:name=".ui.SpecifyLocationActivity"
