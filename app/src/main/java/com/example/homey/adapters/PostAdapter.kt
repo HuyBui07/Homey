@@ -22,6 +22,7 @@ import com.example.homey.R
 import com.example.homey.data.model.Post
 import com.example.homey.data.repository.UserRepository
 import com.example.homey.utils.formatPrice
+import kotlin.math.floor
 
 class PostAdapter(
     private val context: Context,
@@ -52,6 +53,7 @@ class PostAdapter(
         val title = view.findViewById<TextView>(R.id.title)
         val price = view.findViewById<TextView>(R.id.price)
         val area = view.findViewById<TextView>(R.id.area)
+        val pricePerArea = view.findViewById<TextView>(R.id.pricePerArea)
         val address = view.findViewById<TextView>(R.id.address)
         val avatar = view.findViewById<ImageView>(R.id.avatar)
         val userName = view.findViewById<TextView>(R.id.user_name)
@@ -68,6 +70,7 @@ class PostAdapter(
         title.text = post.title
         price.text = formatPrice(post.price)
         area.text = post.area.toInt().toString() + " m²"
+        pricePerArea.text = formatPrice(floor(post.price / post.area)) + "/m²"
         address.text = post.location
         Glide.with(context).load(post.avatar).transform(CircleCrop()).into(avatar)
         userName.text = post.userName

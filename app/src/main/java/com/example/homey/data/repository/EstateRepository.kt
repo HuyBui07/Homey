@@ -23,8 +23,8 @@ class EstateRepository private constructor() {
             }
     }
 
-    fun getEstates(latitude: Double, longitude: Double, onComplete: (List<Estate>?) -> Unit) {
-        val latLonRang = calculateLatLonRange(latitude, longitude, 10.0)
+    fun getEstates(latitude: Double, longitude: Double, radius: Double, onComplete: (List<Estate>?) -> Unit) {
+        val latLonRang = calculateLatLonRange(latitude, longitude, radius)
         val currentUserUid = FirebaseAuth.getInstance().currentUser?.uid
 
         db.collection("estates").whereGreaterThanOrEqualTo("lat", latLonRang.first.first)
@@ -90,6 +90,22 @@ class EstateRepository private constructor() {
             }
     }
 
+    fun getEstateFurtherInformation(estateId: String, onComplete: (description: String?, frontage: Int?, orientation: String?, legalStatus: String?, furnishings: String?) -> Unit) {
+        // Get estate by ID from Firestore
+        db.collection("estates").document(estateId)
+            .get()
+            .addOnSuccessListener { document ->
+                val description = document.getString("description")
+                val frontage = document.getLong("frontage")?.toInt()
+                val orientation = document.getString("orientation")
+                val legalStatus = document.getString("legalStatus")
+                val furnishings = document.getString("furnishings")
+                onComplete(description, frontage, orientation, legalStatus, furnishings)
+            }
+            .addOnFailureListener { exception ->
+            }
+    }
+
     fun getEstatesByOwner(userUid: String, onComplete: (List<Estate>?) -> Unit) {
         // Get estates by owner from Firestore
         db.collection("estates")
@@ -108,6 +124,28 @@ class EstateRepository private constructor() {
                 onComplete(null)
             }
     }
+
+    fun searchEstatesByName(query: String, onComplete: (List<Estate>) -> Unit) {
+        db.collection("estates")
+            .whereGreaterThanOrEqualTo("title", query)
+            .whereLessThanOrEqualTo("title", query + "\uf8ff")
+            .get()
+            .addOnSuccessListener { result ->
+                val estates = result.documents.mapNotNull { document ->
+                    document.toObject(Estate::class.java)?.apply {
+                        id = document.id
+                    }
+                }
+                onComplete(estates) // Luôn trả về danh sách, ngay cả khi rỗng
+            }
+            .addOnFailureListener { exception ->
+                // Log lỗi để debug dễ dàng hơn
+                Log.e("EstateRepository", "Error fetching estates: ${exception.message}", exception)
+                onComplete(emptyList()) // Trả về danh sách rỗng khi gặp lỗi
+            }
+    }
+
+
 
     companion object {
         @Volatile

@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         android:text="You haven't added any estates to your favorites"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/mainContent"
@@ -22,38 +22,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Thanh tìm kiếm -->
-        <LinearLayout
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:layout_marginRight="16dp"
+            android:background="@drawable/search_bar_main"
+            android:elevation="5dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search for a location" />
 
-            <EditText
-                android:id="@+id/searchBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/search_bar_main"
-                android:drawableStart="?android:attr/actionModeWebSearchDrawable"
-                android:drawablePadding="22dp"
-                android:hint="Tìm kiếm..."
-                android:inputType="text"
-                android:padding="12dp" />
-
-            <ImageButton
-                android:id="@+id/btnMap"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:backgroundTint="#898282"
-                android:contentDescription="Map"
-                android:src="@android:drawable/ic_dialog_map"
-                app:tint="#353333" />
-        </LinearLayout>
 
         <ListView
             android:id="@+id/itemPost"
