@@ -115,7 +115,7 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
             val selectedPost = posts[position]
             val intent = Intent(requireContext(), DetailEstateActivity::class.java)
             intent.putExtra("selectedPostId", selectedPost.id)
-            startActivity(intent)
+            startActivityForResult(intent, 1)
         }
 
         filterTypeButton = view.findViewById<Button>(R.id.filterType)
@@ -185,6 +185,10 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
                         newEstatesSize--
                     }
                 }
+            } else {
+                isFetching = false
+                searchRadius += 10.0
+                fetchEstates()
             }
         }
     }

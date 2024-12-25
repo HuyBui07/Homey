@@ -14,7 +14,6 @@
     <string name="no_results_message">Không tìm thấy kết quả phù hợp.</string>
     <string name="error_message">Đã xảy ra lỗi khi tìm kiếm. Vui lòng thử lại.</string>
     <string-array name="property_types">
-        <item>Tất cả nhà đất</item>
         <item>Căn hộ chung cư</item>
         <item>Nhà bán</item>
         <item>Đất bán</item>
