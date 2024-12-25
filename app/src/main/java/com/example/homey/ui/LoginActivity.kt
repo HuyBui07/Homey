@@ -71,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
                             // Navigate to the home screen
                             progressBar.visibility = FrameLayout.GONE
                             val intent = Intent(this, MainPage::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)
                             overridePendingTransition(0, 0)
                         } else {

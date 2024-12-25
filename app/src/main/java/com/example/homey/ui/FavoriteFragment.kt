@@ -1,5 +1,7 @@
 package com.example.homey.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -69,7 +71,15 @@ class FavoriteFragment : Fragment(), PostAdapter.PostAdapterCallback {
 
         posts = mutableListOf<Post>()
         postAdapter = PostAdapter(requireContext(), posts, this)
-        view.findViewById<ListView>(R.id.itemPost).adapter = postAdapter
+        val listView = view.findViewById<ListView>(R.id.itemPost)
+        listView.adapter = postAdapter
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val selectedPost = posts[position]
+            val intent = Intent(requireContext(), DetailEstateActivity::class.java)
+            intent.putExtra("selectedPostId", selectedPost.id)
+            startActivityForResult(intent, 1)
+        }
+
 
         if (!favoriteEstateList.isNullOrEmpty()) {
             for (estateId in favoriteEstateList) {
@@ -142,5 +152,37 @@ class FavoriteFragment : Fragment(), PostAdapter.PostAdapterCallback {
     private fun performSearch(query: String) {
         val searchResult = posts.filter { it.title.contains(query, ignoreCase = true) }
         postAdapter.updatePosts(searchResult)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            // Reload the fragment
+            val fragmentManager = parentFragmentManager
+            val homeFragment = fragmentManager.findFragmentByTag("HOME_FRAGMENT")
+            val favoriteFragment = fragmentManager.findFragmentByTag("FAVORITE_FRAGMENT")
+
+            homeFragment?.let {
+                fragmentManager.beginTransaction().apply {
+                    detach(it)
+                    commit()
+                }
+                fragmentManager.beginTransaction().apply {
+                    attach(it)
+                    commit()
+                }
+            }
+
+            favoriteFragment?.let {
+                fragmentManager.beginTransaction().apply {
+                    detach(it)
+                    commit()
+                }
+                fragmentManager.beginTransaction().apply {
+                    attach(it)
+                    commit()
+                }
+            }
+        }
     }
 }

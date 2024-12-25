@@ -78,7 +78,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="3.8 tỷ"
                     android:textColor="#50A1FE"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -88,7 +87,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="53 m²"
+
                     android:textColor="#50A1FE"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -98,7 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="71,7 triệu/m²"
+
                     android:textColor="#8B8989"
                     android:textSize="12sp" />
 
@@ -108,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableEnd="@drawable/bed_icon"
-                    android:text="3"
+
                     android:textAlignment="center"
                     android:textColor="#8B8989"
                     android:textSize="14sp" />
@@ -119,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:drawableEnd="@drawable/bathtub_icon"
-                    android:text="2"
+
                     android:textAlignment="center"
                     android:textColor="#8B8989"
                     android:textSize="14sp" />
@@ -131,7 +130,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="Với 3 tỷ 8 sở hữu ngay căn hộ SAM Towers Đà Nẵng, cam kết lợi nhuận 200tr/năm, hỗ trợ... "
                 android:textColor="#000000"
                 android:textSize="18dp"
                 android:textStyle="bold"
@@ -145,7 +143,6 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/location_icon"
                 android:drawablePadding="5dp"
-                android:text="Xem trên bản đồ"
                 android:textColor="#50A1FE"
                 android:layout_marginBottom="10dp"/>
 
@@ -166,7 +163,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:lineSpacingExtra="4dp"
-                android:text="Với 3 tỷ 8, bạn đã có thể sở hữu ngay căn hộ cao cấp tại SAM Towers Đà Nẵng – nơi hội tụ đầy đủ tiện ích hiện đại và không gian sống đẳng cấp. Đặc biệt, chủ đầu tư cam kết lợi nhuận lên đến 200 triệu đồng/năm, mang đến cơ hội đầu tư sinh lời hấp dẫn. Hỗ trợ vay vốn linh hoạt, lãi suất ưu đãi cùng các chính sách thanh toán thuận lợi. Đừng bỏ lỡ cơ hội sở hữu một căn hộ tại thành phố biển Đà Nẵng với giá trị gia tăng không ngừng!"
                 android:textColor="#333333"
                 android:textSize="16sp" />
 
@@ -205,7 +201,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -227,7 +223,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -249,7 +245,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -269,7 +265,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -290,7 +286,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -311,7 +307,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
             </LinearLayout>
 
