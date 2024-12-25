@@ -33,7 +33,7 @@ class SettingsFragment : Fragment() {
         }
 
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
-        
+
         val avatarImageView = view.findViewById<ImageView>(R.id.avatarImageView)
         val usernameTextView = view.findViewById<TextView>(R.id.usernameTextView)
         val emailTextView = view.findViewById<TextView>(R.id.emailTextView)

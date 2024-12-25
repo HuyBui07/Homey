@@ -4,29 +4,31 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Bundle
-import android.text.SpannableString
-import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.homey.R
-import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
-import com.example.homey.MainPage
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.example.homey.R
 import com.example.homey.data.repository.UserRepository
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,10 +38,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.io.ByteArrayOutputStream
 import kotlin.coroutines.resumeWithException
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.google.firebase.auth.FirebaseAuth
-
 
 class SignupActivity : AppCompatActivity() {
 
@@ -48,43 +46,22 @@ class SignupActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_signup)
 
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Hide action bar
         supportActionBar?.hide()
 
-        // Interactivity
-        val signUpTextView = findViewById<TextView>(R.id.signUpTextView)
-        val text = "Sign Up / Login"
-
-        val spannable = SpannableString(text)
-        spannable.setSpan(
-            StyleSpan(Typeface.BOLD),
-            0,
-            9,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        ) // "Sign Up /" in bold
-        spannable.setSpan(RelativeSizeSpan(1.4f), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        signUpTextView.text = spannable
-
-        signUpTextView.setOnClickListener {
-            // Navigate to the sign up screen
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            overridePendingTransition(0, 0)
-        }
-
-        // Sign up information interactivity
-        val avatarFrameLayout = findViewById<FrameLayout>(R.id.avatarFrameLayout)
         val avatarImageView = findViewById<ImageView>(R.id.avatarImage)
-        val plusImageView = findViewById<ImageView>(R.id.plusImage)
+        val avatarErrorText = findViewById<TextView>(R.id.avatarErrorText)
+        val emailEditText = findViewById<EditText>(R.id.emailEditText)
+        val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
+        val userNameEditText = findViewById<EditText>(R.id.userNameEditText)
+        val phoneNumberEditText = findViewById<EditText>(R.id.phoneNumberEditText)
+        val signUpButton = findViewById<TextView>(R.id.signUpButton)
+        val progressBar = findViewById<FrameLayout>(R.id.loadingOverlay)
 
         val selectImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -97,93 +74,112 @@ class SignupActivity : AppCompatActivity() {
                             .transform(CircleCrop())
                             .into(avatarImageView)
                         avatarImageView.tag = selectedImageUri
-                        plusImageView.visibility = ImageView.GONE
+                        avatarErrorText.visibility = View.GONE
                     }
                 }
             }
 
-        avatarFrameLayout.setOnClickListener {
+        avatarImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             selectImageLauncher.launch(intent)
         }
 
-        val emailEditText = findViewById<EditText>(R.id.emailEditText)
-        val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
-        val userNameEditText = findViewById<EditText>(R.id.userNameEditText)
-        val phoneNumberEditText = findViewById<EditText>(R.id.phoneNumberEditText)
-
-        val signUpButton = findViewById<TextView>(R.id.signUpButton)
-        val progressBar = findViewById<FrameLayout>(R.id.loadingOverlay)
         signUpButton.setOnClickListener {
-            progressBar.visibility = FrameLayout.VISIBLE
+            val email = emailEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
+            val username = userNameEditText.text.toString().trim()
+            val phoneNumber = phoneNumberEditText.text.toString().trim()
+            val imageUri = avatarImageView.tag as? Uri
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                val email = emailEditText.text.toString()
-                val password = passwordEditText.text.toString()
-                val username = userNameEditText.text.toString()
-                val phoneNumber = phoneNumberEditText.text.toString()
-                val imageUri = avatarImageView.tag as? Uri
+            resetErrorMessages(avatarErrorText, emailEditText, passwordEditText, userNameEditText, phoneNumberEditText)
 
-                if (email.isEmpty() || password.isEmpty() || phoneNumber.isEmpty() || imageUri == null) {
-                    progressBar.visibility = FrameLayout.GONE
-                    showAlertDialog("Error", "Please fill in all the fields.")
-                    return@postDelayed
-                }
+            var hasError = false
 
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    progressBar.visibility = FrameLayout.GONE
-                    showAlertDialog("Error", "The email address is badly formatted.")
-                    Log.d("SignupActivity", "Email: $email")
-                    return@postDelayed
-                }
+            if (imageUri == null) {
+                avatarErrorText.text = "Vui lòng chọn ảnh đại diện"
+                avatarErrorText.visibility = View.VISIBLE
+                hasError = true
+            }
+            if (email.isEmpty()) {
+                emailEditText.error = "Vui lòng nhập email"
+                hasError = true
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.error = "Địa chỉ email không hợp lệ"
+                hasError = true
+            }
+            if (password.isEmpty()) {
+                passwordEditText.error = "Vui lòng nhập mật khẩu"
+                hasError = true
+            }
+            if (username.isEmpty()) {
+                userNameEditText.error = "Vui lòng nhập tên người dùng"
+                hasError = true
+            }
+            if (phoneNumber.isEmpty()) {
+                phoneNumberEditText.error = "Vui lòng nhập số điện thoại"
+                hasError = true
+            }
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    val uploadJob =
-                        async {
-                            val bitmap = getBitmapFromUri(this@SignupActivity, imageUri)
-                            if (bitmap != null) {
-                                uploadBitmapToFirebaseStorage(bitmap)
-                            } else {
-                                null
-                            }
+            if (hasError) return@setOnClickListener
+
+            progressBar.visibility = View.VISIBLE
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val uploadJob = CoroutineScope(Dispatchers.IO).async {
+                            val bitmap = getBitmapFromUri(this@SignupActivity, imageUri!!)
+                            if (bitmap != null) uploadBitmapToFirebaseStorage(bitmap) else null
                         }
 
-
-                    val avatarUrl = uploadJob.await()
-                    if (avatarUrl != null) {
-                        UserRepository.getInstance()
-                            .signUpUser(avatarUrl, email, password, username, phoneNumber) { success, uid ->
-                                if (success) {
-                                    val user = UserRepository.getInstance().auth.currentUser
-                                    user?.sendEmailVerification()?.addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            showAlertDialogAndNavigate(
-                                                "Success",
-                                                "Please check your email to confirm your account!",
-                                                this@SignupActivity,
-                                                LoginActivity::class.java
-                                            )
-                                        } else {
-                                            progressBar.visibility = FrameLayout.GONE
-                                            showAlertDialog(
-                                                "Error",
-                                                "Failed to send verification email."
-                                            )
-                                        }
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val avatarUrl = uploadJob.await()
+                            if (avatarUrl != null) {
+                                UserRepository.getInstance().signUpUser(
+                                    avatarUrl, email, password, username, phoneNumber
+                                ) { success, _ ->
+                                    progressBar.visibility = View.GONE
+                                    if (success) {
+                                        showAlertDialogAndNavigate(
+                                            "Thành công",
+                                            "Vui lòng kiểm tra email để xác minh tài khoản!",
+                                            this@SignupActivity,
+                                            LoginActivity::class.java
+                                        )
+                                    } else {
+                                        showAlertDialog("Lỗi", "Đăng ký không thành công")
                                     }
-                                } else {
-                                    progressBar.visibility = FrameLayout.GONE
-                                    showAlertDialog("Error", "Failed to sign up.")
                                 }
+                            } else {
+                                progressBar.visibility = View.GONE
+                                showAlertDialog("Lỗi", "Không thể tải ảnh đại diện")
                             }
+                        }
                     } else {
-                        progressBar.visibility = FrameLayout.GONE
-                        showAlertDialog("Error", "Failed to upload avatar.")
+                        progressBar.visibility = View.GONE
+                        if (task.exception?.message?.contains("email address is already in use") == true) {
+                            emailEditText.error = "Email này đã được sử dụng"
+                        } else {
+                            showAlertDialog("Lỗi", task.exception?.localizedMessage ?: "Đăng ký thất bại")
+                        }
                     }
                 }
-            }, 100)
         }
+    }
+
+    private fun resetErrorMessages(
+        avatarErrorText: TextView,
+        emailEditText: EditText,
+        passwordEditText: EditText,
+        userNameEditText: EditText,
+        phoneNumberEditText: EditText
+    ) {
+        avatarErrorText.visibility = View.GONE
+        emailEditText.error = null
+        passwordEditText.error = null
+        userNameEditText.error = null
+        phoneNumberEditText.error = null
     }
 
     private fun getBitmapFromUri(context: Context, imageUri: Uri): Bitmap? {
