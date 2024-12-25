@@ -103,7 +103,7 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
                 totalItemCount: Int
             ) {
                 if (firstVisibleItem + visibleItemCount >= totalItemCount && totalItemCount > 0 && searchRadius < 1700.0) {
-                    Log.d("HomeFragment", "Fetching more estates at radius $searchRadius")
+                    Log.d("HomeFragment", "Fetching more estates at radius $searchRadius while isFetching = $isFetching")
                     if (isFetching) return
                     searchRadius += 10.0
                     fetchEstates()
@@ -133,6 +133,13 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
             showSortDialog()
         }
 
+        val btnMap = view.findViewById<ImageButton>(R.id.btnMap)
+        btnMap.setOnClickListener {
+            val intent = Intent(requireContext(), MapsActivity::class.java)
+            intent.putExtra("currentLocation", currentLocation)
+            startActivityForResult(intent, 1)
+        }
+
         return view
     }
 
@@ -140,11 +147,20 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         isFetching = true
         estateRepo.getEstates(currentLocation.latitude, currentLocation.longitude, searchRadius) { estates ->
             if (!estates.isNullOrEmpty()) {
+
                 Log.d("HomeFragment", "Fetched estates at radius $searchRadius: $estates ")
                 val newPosts = mutableListOf<Post>()
-                var newEstatesSize = estates.size
-                for (estate in estates) {
-                    if (posts.none { it.id == estate.id }) {
+                val newEstates = estates.filter { estate -> posts.none { it.id == estate.id } }
+                if (newEstates.isEmpty()) {
+                    isFetching = false
+                    searchRadius += 100
+                    .0
+                    if (searchRadius < 1700.0) fetchEstates()
+                    return@getEstates
+                }
+                val newEstatesSize = newEstates.size
+                for (estate in newEstates) {
+
                         userRepository.getAvatarAndUsernameAndPhoneNumberAndFavoriteState(estate.ownerUid, estate.id!!) { success, avatar, username, phoneNumber, isFavorite ->
                             if (success && username != null && phoneNumber != null && isFavorite != null && avatar != null) {
                                 val post = Post(
@@ -177,18 +193,14 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
                                 activity?.runOnUiThread {
                                     posts.addAll(newPosts)
                                     adapter.notifyDataSetChanged()
-                                    isFetching = false
                                 }
+                                isFetching = false
                             }
                         }
-                    } else {
-                        newEstatesSize--
-                    }
+
                 }
             } else {
                 isFetching = false
-                searchRadius += 10.0
-                fetchEstates()
             }
         }
     }
