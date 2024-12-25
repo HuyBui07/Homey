@@ -2,9 +2,9 @@ package com.example.homey.ui
 
 import android.Manifest
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -63,8 +63,6 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         }
 
         searchRadius = 10.0
-
-        // Hide action bar
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
         estateRepo = EstateRepository.getInstance()
@@ -72,9 +70,7 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
 
         posts = mutableListOf<Post>()
 
-
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastLocation { success ->
             if (success) {
                 fetchEstates()
@@ -175,6 +171,7 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
                             }
                             if (newPosts.size == newEstatesSize) {
                                 activity?.runOnUiThread {
+                                    posts.clear()
                                     posts.addAll(newPosts)
                                     adapter.notifyDataSetChanged()
                                     isFetching = false
@@ -215,30 +212,16 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         ) { permissions ->
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                    // Precise location access granted.
-                    getCurrentLocation() { success ->
-                        onComplete(success)
-                    }
+                    getCurrentLocation() { success -> onComplete(success) }
                 }
-
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                    // Only approximate location access granted.
-                    getCurrentLocation() { success ->
-                        onComplete(success)
-                    }
+                    getCurrentLocation() { success -> onComplete(success) }
                 }
-
-                else -> {
-                    // No location access granted.
-                }
+                else -> { }
             }
         }
-
         locationPermissionRequest.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         )
     }
 
@@ -255,22 +238,18 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         }
         fusedLocationProviderClient.lastLocation
             .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
                 if (location != null) {
                     currentLocation = location
                     onComplete(true)
                 }
             }
-            .addOnFailureListener { exception ->
-                // Handle the exception
-            }
+            .addOnFailureListener { exception -> }
     }
 
     private fun showFilterTypeDialog() {
         val dialogView = layoutInflater.inflate(R.layout.bottom_sheet_filter, null)
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(dialogView)
-
 
         val listName = dialogView.findViewById<TextView>(R.id.filterTitle)
         listName.setText("Chọn loại nhà")
@@ -282,7 +261,7 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         val filterAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, filterTypes)
         listFilterTypes.adapter = filterAdapter
 
-        listFilterTypes.setOnItemClickListener { parent, view, position, id ->
+        listFilterTypes.setOnItemClickListener { _, _, position, _ ->
             selectedType = filterTypes[position]
             filterTypeButton.text = selectedType
             applyFiltersAndSorting()
@@ -312,7 +291,7 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
         val filterAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, filterPrices)
         listFilterPrices.adapter = filterAdapter
 
-        listFilterPrices.setOnItemClickListener { parent, view, position, id ->
+        listFilterPrices.setOnItemClickListener { _, _, position, _ ->
             selectedPrice = filterPrices[position]
             filterPriceButton.text = selectedPrice
             applyFiltersAndSorting()
@@ -385,41 +364,13 @@ class HomeFragment : Fragment(), PostAdapter.PostAdapterCallback {
             else -> filteredPosts
         }
 
-
-        adapter = PostAdapter(requireContext(), sortedPosts, this)
-        listView.adapter = adapter
+        adapter.updatePosts(sortedPosts)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            // Reload the fragment
-            val fragmentManager = parentFragmentManager
-            val homeFragment = fragmentManager.findFragmentByTag("HOME_FRAGMENT")
-            val favoriteFragment = fragmentManager.findFragmentByTag("FAVORITE_FRAGMENT")
-
-            homeFragment?.let {
-                fragmentManager.beginTransaction().apply {
-                    detach(it)
-                    commit()
-                }
-                fragmentManager.beginTransaction().apply {
-                    attach(it)
-                    commit()
-                }
-            }
-
-            favoriteFragment?.let {
-                fragmentManager.beginTransaction().apply {
-                    detach(it)
-                    commit()
-                }
-                fragmentManager.beginTransaction().apply {
-                    attach(it)
-                    commit()
-                }
-            }
+            fetchEstates()
         }
     }
 }
-

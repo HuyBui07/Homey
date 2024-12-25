@@ -30,8 +30,6 @@ import android.os.Looper
 import android.util.Log
 import android.widget.FrameLayout
 
-
-// Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.homey.data.repository.EstateRepository
 import kotlinx.coroutines.CoroutineScope
@@ -43,12 +41,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import kotlin.coroutines.resumeWithException
-
 import com.example.homey.data.model.AddingEstate
 import com.example.homey.data.repository.UserRepository
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.resumeWithException
 
 class AddRealEstateActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
@@ -70,19 +67,14 @@ class AddRealEstateActivity : AppCompatActivity() {
             insets
         }
 
-        // Address latitude and longitude
         var lat = 0.0
         var lon = 0.0
 
-        // Set the title of the action bar
         supportActionBar?.title = "Add Real Estate"
-
-        // Enable the back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         progressBar = findViewById<FrameLayout>(R.id.loadingOverlay)
 
-        // Interactivity
         val locationEditTextView = findViewById<EditText>(R.id.locationEditText)
         locationEditTextView.isFocusable = false
         locationEditTextView.isFocusableInTouchMode = false
@@ -131,7 +123,6 @@ class AddRealEstateActivity : AppCompatActivity() {
                                 if (imageUris.size == 4) {
                                     addImagesButton.visibility = Button.GONE
                                 }
-                                // Access the URI of the selected image
                                 Toast.makeText(
                                     this,
                                     "Selected Image URI: $imageUri",
@@ -147,7 +138,6 @@ class AddRealEstateActivity : AppCompatActivity() {
                                 if (imageUris.size == 4) {
                                     addImagesButton.visibility = Button.GONE
                                 }
-                                // Access the URI of the selected image
                                 Toast.makeText(
                                     this,
                                     "Selected Image URI: $imageUri",
@@ -200,17 +190,13 @@ class AddRealEstateActivity : AppCompatActivity() {
         val addPropertyButton = findViewById<Button>(R.id.addPropertyButton)
         addPropertyButton.setOnClickListener {
             Log.d("AddRealEstateActivity", "Add property button clicked")
-            // Show the progress bar immediately
 
             progressBar.visibility = FrameLayout.VISIBLE
             Log.d("AddRealEstateActivity", "Loading overlay visible")
 
-
-            // Delay the execution of database operations to ensure the progress bar is visible
             Handler(Looper.getMainLooper()).postDelayed({
                 val ownerUid = UserRepository.getInstance().auth.currentUser?.uid
 
-                // Add property to Firestore
                 val title = findViewById<EditText>(R.id.titleEditText).text.toString()
                 val propertyType =
                     findViewById<Spinner>(R.id.propertyTypeSpinner).selectedItem.toString()
@@ -319,7 +305,6 @@ class AddRealEstateActivity : AppCompatActivity() {
         popupImageView.setImageURI(imageUri)
         dialog.show()
     }
-
 
     private fun getBitmapFromUri(context: Context, imageUri: Uri): Bitmap? {
         return context.contentResolver.openInputStream(imageUri)?.use { inputStream ->
