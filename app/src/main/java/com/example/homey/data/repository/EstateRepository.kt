@@ -3,6 +3,7 @@ package com.example.homey.data.repository
 import android.util.Log
 import com.example.homey.data.model.AddingEstate
 import com.example.homey.data.model.Estate
+import com.example.homey.utils.StringUtils.removeVietnameseAccents
 import com.example.homey.utils.calculateLatLonRange
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -125,27 +126,26 @@ class EstateRepository private constructor() {
             }
     }
 
-    fun searchEstatesByName(query: String, onComplete: (List<Estate>) -> Unit) {
+    fun searchEstatesByLocation(location: String, onComplete: (List<Estate>) -> Unit) {
+        val normalizedLocation = removeVietnameseAccents(location)
+
         db.collection("estates")
-            .whereGreaterThanOrEqualTo("title", query)
-            .whereLessThanOrEqualTo("title", query + "\uf8ff")
             .get()
             .addOnSuccessListener { result ->
                 val estates = result.documents.mapNotNull { document ->
                     document.toObject(Estate::class.java)?.apply {
                         id = document.id
                     }
+                }.filter { estate ->
+                    removeVietnameseAccents(estate.location).contains(normalizedLocation, ignoreCase = true)
                 }
-                onComplete(estates) // Luôn trả về danh sách, ngay cả khi rỗng
+                onComplete(estates)
             }
             .addOnFailureListener { exception ->
-                // Log lỗi để debug dễ dàng hơn
-                Log.e("EstateRepository", "Error fetching estates: ${exception.message}", exception)
-                onComplete(emptyList()) // Trả về danh sách rỗng khi gặp lỗi
+                Log.e("EstateRepository", "Error searching by location: ${exception.message}", exception)
+                onComplete(emptyList())
             }
     }
-
-
 
     companion object {
         @Volatile

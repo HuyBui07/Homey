@@ -14,7 +14,7 @@
             android:id="@+id/searchInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nhập tên chung cư để tìm kiếm..."
+            android:hint="Nhập khu vực để tìm kiếm..."
             android:padding="12dp"
             android:background="@drawable/search_bar_main"
             android:drawableStart="@android:drawable/ic_menu_search"

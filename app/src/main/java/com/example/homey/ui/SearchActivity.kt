@@ -1,79 +1,80 @@
 package com.example.homey.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.homey.R
-import com.example.homey.adapters.EstateAdapter
 import com.example.homey.adapters.PostAdapter
-import com.example.homey.data.model.Estate
 import com.example.homey.data.model.Post
 import com.example.homey.data.repository.EstateRepository
 import com.example.homey.data.repository.UserRepository
+import com.example.homey.utils.StringUtils.removeVietnameseAccents
+import java.util.Locale
 
 class SearchActivity : AppCompatActivity(), PostAdapter.PostAdapterCallback {
     private lateinit var searchInput: EditText
     private lateinit var noResultsText: TextView
-    private val estateRepository = EstateRepository.getInstance()
+    private lateinit var listView: ListView
     private lateinit var adapter: PostAdapter
     private lateinit var posts: MutableList<Post>
-    private lateinit var listView: ListView
+    private val estateRepository = EstateRepository.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        setupUI()
+
+        searchInput.setOnEditorActionListener { _, _, _ ->
+            val query = normalizeInput(searchInput.text.toString().trim())
+            if (query.isNotEmpty()) {
+                searchEstatesByLocation(query)
+            }
+            false
+        }
+    }
+
+    private fun setupUI() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // Set the title of the action bar
-        supportActionBar?.title = "Searching for estates"
 
-        // Enable the back button
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        noResultsText = findViewById(R.id.noResultsText)
-
-        posts = mutableListOf<Post>()
-        adapter = PostAdapter(this, posts, this)
-        listView = findViewById(R.id.itemPost)
-        listView.adapter = adapter
+        supportActionBar?.apply {
+            title = "Search Estates"
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         searchInput = findViewById(R.id.searchInput)
+        noResultsText = findViewById(R.id.noResultsText)
+        listView = findViewById(R.id.itemPost)
 
-        searchInput.addTextChangedListener { text ->
-            val query = text.toString().trim()
-            if (query.isNotEmpty()) {
-                searchEstates(query)
-            } else {
-                noResultsText.visibility = View.GONE
-                listView.visibility = View.GONE
-                adapter.updatePosts(emptyList())
-            }
-        }
+        posts = mutableListOf()
+        adapter = PostAdapter(this, posts, this)
+        listView.adapter = adapter
     }
 
-    private fun searchEstates(query: String) {
-        estateRepository.searchEstatesByName(query) { estates ->
+    private fun normalizeInput(input: String): String {
+        return removeVietnameseAccents(input.trim().lowercase(Locale.getDefault()))
+    }
+
+    private fun searchEstatesByLocation(location: String) {
+        estateRepository.searchEstatesByLocation(location) { estates ->
             if (estates.isNotEmpty()) {
+                posts.clear()
                 for (estate in estates) {
                     if (posts.none { it.id == estate.id }) {
-                        UserRepository.getInstance().getAvatarAndUsernameAndPhoneNumberAndFavoriteState(estate.ownerUid, estate.id!!) { success, avatar, username, phoneNumber, isFavorite ->
-                            if (success && username != null && phoneNumber != null && isFavorite != null && avatar != null) {
+                        UserRepository.getInstance().getAvatarAndUsernameAndPhoneNumberAndFavoriteState(
+                            estate.ownerUid, estate.id!!
+                        ) { success, avatar, username, phoneNumber, isFavorite ->
+                            if (success && avatar != null && username != null && phoneNumber != null && isFavorite != null) {
                                 val post = Post(
                                     estate.id!!,
                                     estate.images[0],
@@ -96,7 +97,7 @@ class SearchActivity : AppCompatActivity(), PostAdapter.PostAdapterCallback {
                                     estate.orientation,
                                     estate.legalStatus,
                                     estate.furnishings,
-                                    isFavorite,
+                                    isFavorite
                                 )
                                 posts.add(post)
                             }
@@ -108,6 +109,9 @@ class SearchActivity : AppCompatActivity(), PostAdapter.PostAdapterCallback {
                         }
                     }
                 }
+            } else {
+                noResultsText.visibility = View.VISIBLE
+                listView.visibility = View.GONE
             }
         }
     }
@@ -118,6 +122,6 @@ class SearchActivity : AppCompatActivity(), PostAdapter.PostAdapterCallback {
     }
 
     override fun onFavoriteButtonClicked(postId: String) {
-        setResult(Activity.RESULT_OK)
+        Log.d("SearchActivity", "Favorite button clicked for post: $postId")
     }
 }
