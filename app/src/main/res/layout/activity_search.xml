@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,6 +23,66 @@
             android:layout_margin="16dp"
             android:drawablePadding="8dp" />
 
+        <!-- Các nút lọc và sắp xếp -->
+        <HorizontalScrollView
+            android:id="@+id/filterSortContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:scrollbars="none"
+            android:layout_marginBottom="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/filterType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/search_bar_main"
+                    android:drawableEnd="@android:drawable/arrow_down_float"
+                    android:drawableTint="#838181"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Loại nhà"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#070707"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/filterPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/search_bar_main"
+                    android:drawableEnd="@android:drawable/arrow_down_float"
+                    android:drawableTint="#838181"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Mức giá"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#070707"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/filterSort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/search_bar_main"
+                    android:drawableEnd="@drawable/desc_icon"
+                    android:drawableTint="#838181"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Sắp xếp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#070707"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Danh sách kết quả -->
         <ListView
             android:id="@+id/itemPost"
             android:layout_width="match_parent"
