@@ -47,12 +47,10 @@ class EditAccountActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Edit Account"
 
-        // Allow go back
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val progressBar = findViewById<FrameLayout>(R.id.loadingOverlay)
 
-        // Initialize the avatar, username and phone number
         val avatarImageView = findViewById<ImageView>(R.id.avatarImage)
         var isImageChanged = false
         val usernameEditText = findViewById<EditText>(R.id.userNameEditText)
@@ -77,7 +75,6 @@ class EditAccountActivity : AppCompatActivity() {
             phoneEditText.setText(phone)
         }
 
-        // Edit the user's account
         val selectImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {

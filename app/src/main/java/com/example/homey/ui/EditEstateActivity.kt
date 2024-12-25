@@ -78,15 +78,12 @@ class EditEstateActivity : AppCompatActivity() {
             insets
         }
 
-        // Set the title of the action bar
         supportActionBar?.title = "Edit Real Estate"
 
-        // Enable the back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         progressBar = findViewById<FrameLayout>(R.id.loadingOverlay)
 
-        // Initialize UI elements
         titleEditText = findViewById<EditText>(R.id.titleEditText)
         propertyTypeSpinner = findViewById<Spinner>(R.id.propertyTypeSpinner)
         locationEditText = findViewById<EditText>(R.id.locationEditText)
@@ -140,7 +137,6 @@ class EditEstateActivity : AppCompatActivity() {
         addImagesButton = findViewById<Button>(R.id.addImagesButton)
         val imagesTextView = findViewById<TextView>(R.id.imagesCounter)
 
-        // Interactivity
         val selectImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
@@ -236,7 +232,6 @@ class EditEstateActivity : AppCompatActivity() {
             selectImageLauncher.launch(intent)
         }
 
-        // Initiate the images counter state
         addImagesButton.visibility = Button.GONE
         imagesTextView.text = "Images (4/4)"
 
@@ -268,7 +263,6 @@ class EditEstateActivity : AppCompatActivity() {
             imagesLinearLayout.addView(itemView)
         }
 
-        // Interactivity
         locationEditText.isFocusable = false
         locationEditText.isFocusableInTouchMode = false
         val getLocation =
@@ -285,7 +279,6 @@ class EditEstateActivity : AppCompatActivity() {
             getLocation.launch(intent)
         }
 
-        // Edit button click listener
         val editButton = findViewById<Button>(R.id.editPropertyButton)
         editButton.setOnClickListener {
             progressBar.visibility = FrameLayout.VISIBLE
@@ -330,10 +323,8 @@ class EditEstateActivity : AppCompatActivity() {
                     return@postDelayed
                 }
 
-                // Delete the images that were removed
                 deleteImage(estateId, deletedImagesUrl)
 
-                // Upload the newly added images
                 CoroutineScope(Dispatchers.IO).launch {
                     val uploadedImages = newlyAddedImages.map { imageUri ->
                         async {

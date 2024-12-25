@@ -67,7 +67,6 @@ class EstateAdapter(
         holder.bathrooms.text = estate.bathrooms.toString()
 
         holder.itemView.setOnClickListener {
-            // Handle the click event
             val intent = Intent(holder.itemView.context, EditEstateActivity::class.java)
             intent.putExtra("estateId", estate.id)
             intent.putExtra("estateTitle", estate.title)

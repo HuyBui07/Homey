@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Input for searching -->
         <EditText
             android:id="@+id/searchInput"
             android:layout_width="match_parent"
@@ -19,7 +18,6 @@
             android:padding="12dp"
             android:background="@drawable/search_bar_main" />
 
-        <!-- Search button -->
         <Button
             android:id="@+id/searchButton"
             android:layout_width="match_parent"
@@ -27,13 +25,11 @@
             android:text="Tìm kiếm"
             android:layout_marginTop="8dp" />
 
-        <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/searchResults"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <!-- TextView for no results -->
         <TextView
             android:id="@+id/noResultsText"
             android:layout_width="match_parent"

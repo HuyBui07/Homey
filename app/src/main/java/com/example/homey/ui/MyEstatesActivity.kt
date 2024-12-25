@@ -47,20 +47,15 @@ class MyEstatesActivity : AppCompatActivity() {
             insets
         }
 
-        // Set the title of the action bar
         supportActionBar?.title = "My Real Estates"
-
-        // Enable the back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Set up add estate button
         val addEstateButton = findViewById<FloatingActionButton>(R.id.fab)
         addEstateButton.setOnClickListener {
             val intent = Intent(this, AddRealEstateActivity::class.java)
             startForResult.launch(intent)
         }
 
-        // Fetch and display estates
         uid?.let { userId ->
             estateRepo.getEstatesByOwner(userId) { estates ->
                 if (estates != null) {

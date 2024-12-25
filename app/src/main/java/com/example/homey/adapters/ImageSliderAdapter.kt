@@ -21,7 +21,6 @@ class ImageSliderAdapter(private val imageList: List<String>) :
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val imageUrl = imageList[position]
 
-        // Load image using Glide, Picasso, or any image loading library
         Glide.with(holder.imageView.context)
             .load(imageUrl)
             .into(holder.imageView)

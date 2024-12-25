@@ -66,7 +66,6 @@ class EstateRepository private constructor() {
     }
 
     fun deleteEstate(estateId: String, onComplete: (Boolean) -> Unit) {
-        // Delete estate from Firestore
         db.collection("estates").document(estateId)
             .delete()
             .addOnSuccessListener {
@@ -78,7 +77,6 @@ class EstateRepository private constructor() {
     }
 
     fun getEstateById(estateId: String, onComplete: (Estate?) -> Unit) {
-        // Get estate by ID from Firestore
         db.collection("estates").document(estateId)
             .get()
             .addOnSuccessListener { document ->
@@ -87,13 +85,11 @@ class EstateRepository private constructor() {
                 onComplete(estate)
             }
             .addOnFailureListener { exception ->
-                // Handle the error
                 onComplete(null)
             }
     }
 
     fun getEstateFurtherInformation(estateId: String, onComplete: (description: String?, frontage: Int?, orientation: String?, legalStatus: String?, furnishings: String?) -> Unit) {
-        // Get estate by ID from Firestore
         db.collection("estates").document(estateId)
             .get()
             .addOnSuccessListener { document ->
@@ -109,7 +105,6 @@ class EstateRepository private constructor() {
     }
 
     fun getEstatesByOwner(userUid: String, onComplete: (List<Estate>?) -> Unit) {
-        // Get estates by owner from Firestore
         db.collection("estates")
             .whereEqualTo("ownerUid", userUid)
             .get()
@@ -122,7 +117,6 @@ class EstateRepository private constructor() {
                 onComplete(estates)
             }
             .addOnFailureListener { exception ->
-                // Handle the error
                 onComplete(null)
             }
     }
@@ -130,14 +124,14 @@ class EstateRepository private constructor() {
     suspend fun searchEstatesByAddress(address: String): List<Estate> {
         return try {
             val result = db.collection("estates")
-                .whereEqualTo("location", address) // Tìm kiếm theo địa chỉ
+                .whereEqualTo("location", address)
                 .get()
                 .await()
             result.documents.mapNotNull { document ->
                 document.toObject(Estate::class.java)?.apply { id = document.id }
             }
         } catch (e: Exception) {
-            emptyList() // Trả về danh sách rỗng nếu có lỗi
+            emptyList()
         }
     }
 

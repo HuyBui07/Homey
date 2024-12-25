@@ -37,7 +37,6 @@ class DetailEstateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.detail_estates)
-        // Set the title of the action bar
         supportActionBar?.hide()
 
         val buttonBack = findViewById<ImageButton>(R.id.button_back)
@@ -46,14 +45,11 @@ class DetailEstateActivity : AppCompatActivity() {
             finish()
         }
 
-        // Khởi tạo các biến
         estateRepo = EstateRepository.getInstance()
         userRepository = UserRepository.getInstance()
 
-        // Lấy dữ liệu từ Intent
         val postId = intent.getStringExtra("selectedPostId")
 
-        // Tham chiếu đến các view
         imageSlider = findViewById<ViewPager2>(R.id.image_slider)
         detail_price = findViewById(R.id.detail_price)
         detail_area = findViewById(R.id.detail_area)
@@ -114,7 +110,6 @@ class DetailEstateActivity : AppCompatActivity() {
     }
 
     private fun displayPost(post: Post) {
-        // Hiển thị thông tin bài đăng
 
             val imageUrls = listOf(
                 post.imageMain,

@@ -45,7 +45,6 @@ class PostAdapter(
             .inflate(R.layout.item_mainpage, parent, false)
         val post = posts[position]
 
-        // Ánh xạ các thành phần từ itemPost.xml
         val mainImage = view.findViewById<ImageView>(R.id.mainImage)
         val smallImage1 = view.findViewById<ImageView>(R.id.smallImage1)
         val smallImage2 = view.findViewById<ImageView>(R.id.smallImage2)
@@ -62,7 +61,6 @@ class PostAdapter(
         val bedroom = view.findViewById<TextView>(R.id.bedroom)
         val bathroom = view.findViewById<TextView>(R.id.bathroom)
 
-        // Gán dữ liệu vào view
         Glide.with(context).load(post.imageMain).into(mainImage)
         Glide.with(context).load(post.smallImage1).into(smallImage1)
         Glide.with(context).load(post.smallImage2).into(smallImage2)
@@ -80,7 +78,6 @@ class PostAdapter(
         bathroom.text = post.bathrooms.toString()
 
 
-        // Interactivity
         val favoriteButton = view.findViewById<ImageView>(R.id.favorite_button)
         var isFavorite = post.isFavorite
         favoriteButton.setImageResource(if (isFavorite) R.drawable.favorite_icon_2 else R.drawable.favorite_icon)

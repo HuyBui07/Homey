@@ -32,10 +32,8 @@ class SettingsFragment : Fragment() {
             insets
         }
 
-        // Hide action bar
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
-        // Initialize the avatar and username
         val avatarImageView = view.findViewById<ImageView>(R.id.avatarImageView)
         val usernameTextView = view.findViewById<TextView>(R.id.usernameTextView)
         val emailTextView = view.findViewById<TextView>(R.id.emailTextView)

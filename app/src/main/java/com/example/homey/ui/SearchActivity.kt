@@ -34,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        // Đăng ký ActivityResultLauncher để xử lý kết quả trả về từ EditEstateActivity
         startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val updatedEstateId = result.data?.getStringExtra("updatedEstateId")
@@ -42,18 +41,15 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        // Ánh xạ các view
         searchInput = findViewById(R.id.searchInput)
         searchButton = findViewById(R.id.searchButton)
         searchResults = findViewById(R.id.searchResults)
         noResultsText = findViewById(R.id.noResultsText)
 
-        // Thiết lập RecyclerView
         searchResults.layoutManager = LinearLayoutManager(this)
         adapter = EstateAdapter(emptyList(), startForResult)
         searchResults.adapter = adapter
 
-        // Xử lý khi nhấn nút tìm kiếm
         searchButton.setOnClickListener {
             val query = searchInput.text.toString().trim()
             if (query.isNotEmpty()) {
@@ -66,16 +62,13 @@ class SearchActivity : AppCompatActivity() {
 
     private fun performSearch(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            // Gọi Repository để tìm kiếm bất động sản
             val estates: List<Estate> = estateRepository.searchEstatesByAddress(query)
             withContext(Dispatchers.Main) {
                 if (estates.isNotEmpty()) {
-                    // Hiển thị kết quả tìm kiếm
                     adapter.updateEstates(estates)
                     searchResults.visibility = View.VISIBLE
                     noResultsText.visibility = View.GONE
                 } else {
-                    // Hiển thị thông báo không tìm thấy
                     adapter.updateEstates(emptyList())
                     searchResults.visibility = View.GONE
                     noResultsText.text = "Không tìm thấy kết quả phù hợp"

@@ -7,14 +7,12 @@
     android:fitsSystemWindows="true"
     tools:context=".MainPage">
 
-    <!-- Fragment container -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomNavBar" />
 
-    <!-- Include the bottom navigation bar -->
     <include
         android:id="@+id/bottomNavBar"
         layout="@layout/bottom_nav_bar"

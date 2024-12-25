@@ -44,7 +44,6 @@ class FavoriteFragment : Fragment(), PostAdapter.PostAdapterCallback {
             insets
         }
 
-        // Hide action bar
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
 
         val favoriteEstateList = userRepository.getFavorites()
