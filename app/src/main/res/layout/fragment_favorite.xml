@@ -29,12 +29,17 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
             android:background="@drawable/search_bar_main"
             android:elevation="5dp"
             app:iconifiedByDefault="false"
             app:queryHint="Search for a location" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D3D3D3" />
 
         <ListView
             android:id="@+id/itemPost"

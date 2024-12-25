@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -53,6 +54,22 @@ class SignupActivity : AppCompatActivity() {
         }
 
         supportActionBar?.hide()
+
+        val logInTextView = findViewById<TextView>(R.id.signUpTextView)
+        val text = "Sign Up / Login"
+
+        val spannable = SpannableString(text)
+        spannable.setSpan(StyleSpan(Typeface.BOLD), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(RelativeSizeSpan(1.4f), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        logInTextView.text = spannable
+
+        logInTextView.setOnClickListener {
+            // Navigate to the sign up screen
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(0, 0)
+        }
 
         val avatarImageView = findViewById<ImageView>(R.id.avatarImage)
         val avatarErrorText = findViewById<TextView>(R.id.avatarErrorText)

@@ -59,9 +59,32 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             progressBar.visibility = FrameLayout.VISIBLE
 
+            emailEditText.error = null
+            passwordEditText.error = null
+
+            var hasError = false
+
             // Login user
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
+
+            if (email.isEmpty()) {
+                emailEditText.error = "Vui lòng nhập email"
+                hasError = true
+            } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.error = "Địa chỉ email không hợp lệ"
+                hasError = true
+            }
+            if (password.isEmpty()) {
+                passwordEditText.error = "Vui lòng nhập mật khẩu"
+                hasError = true
+            }
+
+            if (hasError) {
+                progressBar.visibility = FrameLayout.GONE
+                return@setOnClickListener
+            }
+
             if (email.isNotEmpty() && password.isNotEmpty()) {
                 UserRepository.getInstance().loginUser(email, password) { success ->
                     if (success) {
@@ -88,7 +111,6 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 // Show error message
                 progressBar.visibility = FrameLayout.GONE
-                showAlertDialog("Error", "Please fill in all fields")
             }
         }
 
