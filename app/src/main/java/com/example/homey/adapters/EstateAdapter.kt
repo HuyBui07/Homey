@@ -15,7 +15,15 @@ import com.example.homey.ui.EditEstateActivity
 import com.example.homey.utils.formatPrice
 import kotlin.math.floor
 
-class EstateAdapter(private var estates: List<Estate>, private val startForResult: ActivityResultLauncher<Intent>) : RecyclerView.Adapter<EstateAdapter.EstateViewHolder>() {
+class EstateAdapter(
+    private var estates: List<Estate>,
+    private val startForResult: ActivityResultLauncher<Intent>
+) : RecyclerView.Adapter<EstateAdapter.EstateViewHolder>() {
+
+    class EstateAdapter(
+        private var estates: List<Estate>,
+        private val startForResult: ActivityResultLauncher<Intent>? = null
+    )
 
     class EstateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mainImage: ImageView = itemView.findViewById(R.id.mainImage)
@@ -58,7 +66,6 @@ class EstateAdapter(private var estates: List<Estate>, private val startForResul
         holder.bedrooms.text = estate.bedrooms.toString()
         holder.bathrooms.text = estate.bathrooms.toString()
 
-
         holder.itemView.setOnClickListener {
             // Handle the click event
             val intent = Intent(holder.itemView.context, EditEstateActivity::class.java)
@@ -81,6 +88,4 @@ class EstateAdapter(private var estates: List<Estate>, private val startForResul
         estates = newEstates
         notifyDataSetChanged()
     }
-
-
 }

@@ -27,9 +27,11 @@ class MyEstatesActivity : AppCompatActivity() {
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                estateRepo.getEstatesByOwner(uid!!) { estates ->
-                    if (estates != null) {
-                        updateEstates(estates)
+                uid?.let { userId ->
+                    estateRepo.getEstatesByOwner(userId) { estates ->
+                        if (estates != null) {
+                            updateEstates(estates)
+                        }
                     }
                 }
             }
@@ -51,20 +53,23 @@ class MyEstatesActivity : AppCompatActivity() {
         // Enable the back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Interactivity
+        // Set up add estate button
         val addEstateButton = findViewById<FloatingActionButton>(R.id.fab)
         addEstateButton.setOnClickListener {
             val intent = Intent(this, AddRealEstateActivity::class.java)
             startForResult.launch(intent)
         }
 
-        estateRepo.getEstatesByOwner(uid!!) { estates ->
-            if (estates != null) {
-                displayEstates(estates)
+        // Fetch and display estates
+        uid?.let { userId ->
+            estateRepo.getEstatesByOwner(userId) { estates ->
+                if (estates != null) {
+                    displayEstates(estates)
+                } else {
+                    showNoEstatesMessage()
+                }
             }
         }
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -79,14 +84,13 @@ class MyEstatesActivity : AppCompatActivity() {
         if (estates.isEmpty()) {
             recyclerView.visibility = RecyclerView.GONE
             noEstatesTextView.visibility = TextView.VISIBLE
-            return
+        } else {
+            noEstatesTextView.visibility = TextView.GONE
+            recyclerView.visibility = RecyclerView.VISIBLE
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            estateAdapter = EstateAdapter(estates, startForResult)
+            recyclerView.adapter = estateAdapter
         }
-
-        noEstatesTextView.visibility = TextView.GONE
-        recyclerView.visibility = RecyclerView.VISIBLE
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        estateAdapter = EstateAdapter(estates, startForResult)
-        recyclerView.adapter = estateAdapter
     }
 
     private fun updateEstates(estates: List<Estate>) {
@@ -95,5 +99,13 @@ class MyEstatesActivity : AppCompatActivity() {
         } else {
             displayEstates(estates)
         }
+    }
+
+    private fun showNoEstatesMessage() {
+        val noEstatesTextView = findViewById<TextView>(R.id.noEstatesTextView)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+
+        noEstatesTextView.visibility = TextView.VISIBLE
+        recyclerView.visibility = RecyclerView.GONE
     }
 }

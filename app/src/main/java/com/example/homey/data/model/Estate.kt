@@ -1,12 +1,12 @@
 package com.example.homey.data.model
 
-import com.google.firebase.firestore.DocumentReference
-
 data class Estate(
     var id: String?,
     val title: String,
     val propertyType: String,
     val location: String,
+    val latitude: Double, // Thêm latitude
+    val longitude: Double, // Thêm longitude
     val price: Double,
     val size: Double,
     val bedrooms: Int,
@@ -20,5 +20,9 @@ data class Estate(
     val legalStatus: String,
     val furnishings: String,
 ) {
-    constructor() : this(null ,"", "", "", 0.0, 0.0, 0, 0, "", mutableListOf(), "", "", 0.0, "", "", "")
+    // Constructor mặc định
+    constructor() : this(
+        null, "", "", "", 0.0, 0.0, 0.0, 0.0, 0, 0, "", mutableListOf(),
+        "", "", 0.0, "", "", ""
+    )
 }

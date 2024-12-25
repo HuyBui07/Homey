@@ -1,123 +1,87 @@
 package com.example.homey.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.homey.R
 import com.example.homey.adapters.EstateAdapter
-import com.example.homey.adapters.PostAdapter
 import com.example.homey.data.model.Estate
-import com.example.homey.data.model.Post
 import com.example.homey.data.repository.EstateRepository
-import com.example.homey.data.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SearchActivity : AppCompatActivity(), PostAdapter.PostAdapterCallback {
+class SearchActivity : AppCompatActivity() {
     private lateinit var searchInput: EditText
+    private lateinit var searchButton: Button
+    private lateinit var searchResults: RecyclerView
     private lateinit var noResultsText: TextView
+    private lateinit var adapter: EstateAdapter
+    private lateinit var startForResult: ActivityResultLauncher<Intent>
     private val estateRepository = EstateRepository.getInstance()
-    private lateinit var adapter: PostAdapter
-    private lateinit var posts: MutableList<Post>
-    private lateinit var listView: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        // Đăng ký ActivityResultLauncher để xử lý kết quả trả về từ EditEstateActivity
+        startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val updatedEstateId = result.data?.getStringExtra("updatedEstateId")
+                Toast.makeText(this, "Updated estate: $updatedEstateId", Toast.LENGTH_SHORT).show()
+            }
         }
-        // Set the title of the action bar
-        supportActionBar?.title = "Searching for estates"
 
-        // Enable the back button
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        // Ánh xạ các view
+        searchInput = findViewById(R.id.searchInput)
+        searchButton = findViewById(R.id.searchButton)
+        searchResults = findViewById(R.id.searchResults)
         noResultsText = findViewById(R.id.noResultsText)
 
-        posts = mutableListOf<Post>()
-        adapter = PostAdapter(this, posts, this)
-        listView = findViewById(R.id.itemPost)
-        listView.adapter = adapter
+        // Thiết lập RecyclerView
+        searchResults.layoutManager = LinearLayoutManager(this)
+        adapter = EstateAdapter(emptyList(), startForResult)
+        searchResults.adapter = adapter
 
-        searchInput = findViewById(R.id.searchInput)
-
-        searchInput.addTextChangedListener { text ->
-            val query = text.toString().trim()
+        // Xử lý khi nhấn nút tìm kiếm
+        searchButton.setOnClickListener {
+            val query = searchInput.text.toString().trim()
             if (query.isNotEmpty()) {
-                searchEstates(query)
+                performSearch(query)
             } else {
-                noResultsText.visibility = View.GONE
-                listView.visibility = View.GONE
-                adapter.updatePosts(emptyList())
+                Toast.makeText(this, "Vui lòng nhập địa chỉ để tìm kiếm.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun searchEstates(query: String) {
-        estateRepository.searchEstatesByName(query) { estates ->
-            if (estates.isNotEmpty()) {
-                for (estate in estates) {
-                    if (posts.none { it.id == estate.id }) {
-                        UserRepository.getInstance().getAvatarAndUsernameAndPhoneNumberAndFavoriteState(estate.ownerUid, estate.id!!) { success, avatar, username, phoneNumber, isFavorite ->
-                            if (success && username != null && phoneNumber != null && isFavorite != null && avatar != null) {
-                                val post = Post(
-                                    estate.id!!,
-                                    estate.images[0],
-                                    estate.images[1],
-                                    estate.images[2],
-                                    estate.images[3],
-                                    estate.title,
-                                    estate.propertyType,
-                                    estate.price,
-                                    estate.size,
-                                    estate.location,
-                                    avatar,
-                                    username,
-                                    phoneNumber,
-                                    estate.bedrooms,
-                                    estate.bathrooms,
-                                    estate.postTime,
-                                    estate.description,
-                                    estate.frontage,
-                                    estate.orientation,
-                                    estate.legalStatus,
-                                    estate.furnishings,
-                                    isFavorite,
-                                )
-                                posts.add(post)
-                            }
-                            if (posts.size == estates.size) {
-                                adapter.updatePosts(posts)
-                                listView.visibility = View.VISIBLE
-                                noResultsText.visibility = View.GONE
-                            }
-                        }
-                    }
+    private fun performSearch(query: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            // Gọi Repository để tìm kiếm bất động sản
+            val estates: List<Estate> = estateRepository.searchEstatesByAddress(query)
+            withContext(Dispatchers.Main) {
+                if (estates.isNotEmpty()) {
+                    // Hiển thị kết quả tìm kiếm
+                    adapter.updateEstates(estates)
+                    searchResults.visibility = View.VISIBLE
+                    noResultsText.visibility = View.GONE
+                } else {
+                    // Hiển thị thông báo không tìm thấy
+                    adapter.updateEstates(emptyList())
+                    searchResults.visibility = View.GONE
+                    noResultsText.text = "Không tìm thấy kết quả phù hợp"
+                    noResultsText.visibility = View.VISIBLE
                 }
             }
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
-    }
-
-    override fun onFavoriteButtonClicked(postId: String) {
-        setResult(Activity.RESULT_OK)
     }
 }

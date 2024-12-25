@@ -15,13 +15,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        val mapsKey = project.findProperty("MAPS_KEY") as String? ?: "DUMMY_KEY"
+        val mapsKey = project.findProperty("MAPS_KEY") as String? ?: "AIzaSyD7X1sqd8L-PYs432Y-TJ27RRnf-RA8oq0"
         manifestPlaceholders["MAPS_KEY"] = mapsKey
 
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val mapsKey = project.findProperty("MAPS_KEY") as String? ?: "DUMMY_KEY"
-        manifestPlaceholders["MAPS_KEY"] = mapsKey
+
     }
 
     buildTypes {
@@ -65,6 +64,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.location)
+    implementation(libs.places)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

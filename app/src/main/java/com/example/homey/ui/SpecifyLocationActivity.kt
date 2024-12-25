@@ -4,10 +4,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -22,233 +22,161 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.AdvancedMarkerOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import java.util.*
 
 class SpecifyLocationActivity : AppCompatActivity(), OnMapReadyCallback {
-    private val FINE_PERMISSON_CODE = 1
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var location: Location
-    private lateinit var googleMap: GoogleMap
-    private var currentMarker: Marker? = null
-    private lateinit var mapSearchView: SearchView
     private lateinit var geoCoder: Geocoder
+    private lateinit var googleMap: GoogleMap
     private lateinit var addLocationButton: Button
-    private var lat = 0.0
-    private var lon = 0.0
+    private lateinit var mapSearchView: SearchView
+    private var currentMarker: Marker? = null
+
+    private var lat: Double = 0.0
+    private var lon: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_specify_location)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        geoCoder = Geocoder(this)
-
-        // Enable the "Up" button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val mapFragment =
-            supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        geoCoder = Geocoder(this, Locale.getDefault())
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         mapSearchView = findViewById(R.id.searchView)
         mapSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                val location = mapSearchView.query.toString()
-                var addressList = mutableListOf<Address>()
-
-                try {
-                    geoCoder.getFromLocationName(location, 1, object : Geocoder.GeocodeListener {
-                        override fun onGeocode(addresses: MutableList<Address>) {
-                            if (addresses.isNotEmpty()) {
-                                addressList = addresses
-                                val address = addressList[0]
-                                lat = address.latitude
-                                lon = address.longitude
-                                val latLng = LatLng(lat, lon)
-                                val advancedMarkerOptions = AdvancedMarkerOptions()
-                                runOnUiThread {
-                                    if (currentMarker != null) {
-                                        currentMarker?.remove()
-                                    }
-                                    currentMarker = googleMap.addMarker(
-                                        advancedMarkerOptions.position(latLng).title(location)
-                                    )
-                                    googleMap.animateCamera(
-                                        CameraUpdateFactory.newLatLngZoom(
-                                            latLng, 17f
-                                        )
-                                    )
-                                }
-                            }
-                        }
-
-                        override fun onError(errorMessage: String?) {
-                            super.onError(errorMessage)
-
-                        }
-
-                    })
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                mapSearchView.clearFocus()
+                if (!query.isNullOrEmpty()) {
+                    searchLocation(query)
                 }
-
-                return false
+                return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
+            override fun onQueryTextChange(newText: String?): Boolean = false
         })
-
-        mapFragment.getMapAsync(this)
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLastLocation()
 
         addLocationButton = findViewById(R.id.addLocationButton)
         addLocationButton.setOnClickListener {
-            val intent = intent
-            intent.putExtra("location", mapSearchView.query.toString())
-            intent.putExtra("lat", lat)
-            intent.putExtra("lon", lon)
-            setResult(RESULT_OK, intent)
+            if (lat == 0.0 && lon == 0.0) {
+                Toast.makeText(this, "Please select a valid location.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val resultIntent = intent
+            resultIntent.putExtra("location", mapSearchView.query.toString())
+            resultIntent.putExtra("lat", lat)
+            resultIntent.putExtra("lon", lon)
+            setResult(RESULT_OK, resultIntent)
             finish()
         }
+
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        requestLocationPermissions()
     }
 
-    private fun getLastLocation() {
+    private fun requestLocationPermissions() {
         val locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
             when {
                 permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                    // Precise location access granted.
                     getCurrentLocation()
                 }
                 permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                    // Only approximate location access granted.
                     getCurrentLocation()
                 }
                 else -> {
-                    // No location access granted.
+                    Toast.makeText(this, "Permission denied. Unable to get location.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
 
-        locationPermissionRequest.launch(arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ))
+        locationPermissionRequest.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        )
     }
 
-
     private fun getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
-        fusedLocationProviderClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    val latLng = LatLng(location.latitude, location.longitude)
-                    try {
-                        geoCoder.getFromLocation(
-                            latLng.latitude,
-                            latLng.longitude,
-                            1,
-                            object : Geocoder.GeocodeListener {
-                                override fun onGeocode(addresses: MutableList<Address>) {
 
-                                    if (addresses.isNotEmpty()) {
-                                        val address: Address = addresses[0]
-                                        val addressText = address.getAddressLine(0)
-                                        runOnUiThread {
-                                            mapSearchView.setQuery(addressText, true)
-                                        }
-                                    }
-                                }
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                val latLng = LatLng(location.latitude, location.longitude)
+                lat = location.latitude
+                lon = location.longitude
+                moveCameraAndSetMarker(latLng, "Current Location")
+            } else {
+                Toast.makeText(this, "Unable to get current location.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-                                override fun onError(errorMessage: String?) {
-                                    super.onError(errorMessage)
-
-                                }
-
-                            })
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+    private fun searchLocation(query: String) {
+        try {
+            val addresses = geoCoder.getFromLocationName(query, 1)
+            if (addresses != null) {
+                if (addresses.isNotEmpty()) {
+                    val address = addresses[0]
+                    val latLng = LatLng(address.latitude, address.longitude)
+                    lat = address.latitude
+                    lon = address.longitude
+                    moveCameraAndSetMarker(latLng, query)
+                } else {
+                    Toast.makeText(this, "Location not found.", Toast.LENGTH_SHORT).show()
                 }
             }
-            .addOnFailureListener { exception ->
-                // Handle the exception
-            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to find location.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun moveCameraAndSetMarker(latLng: LatLng, title: String?) {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+        currentMarker?.remove()
+        currentMarker = googleMap.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title(title)
+        )
     }
 
     override fun onMapReady(map: GoogleMap) {
         this.googleMap = map
-        googleMap.setOnMapClickListener(this::onMapClick)
-    }
-
-    private fun onMapClick(latLng: LatLng) {
-        val advancedMarkerOptions = AdvancedMarkerOptions()
-        runOnUiThread {
-            if (currentMarker != null) {
-                currentMarker?.remove()
-            }
-            currentMarker = googleMap.addMarker(
-                advancedMarkerOptions.position(latLng)
-            )
-        }
-
-        try {
-            geoCoder.getFromLocation(
-                latLng.latitude,
-                latLng.longitude,
-                1,
-                object : Geocoder.GeocodeListener {
-                    override fun onGeocode(addresses: MutableList<Address>) {
-
-                        if (addresses.isNotEmpty()) {
-                            val address: Address = addresses[0]
-                            val addressText = address.getAddressLine(0)
-                            runOnUiThread {
-                                mapSearchView.setQuery(addressText, false)
-                            }
-                        }
-                    }
-
-                    override fun onError(errorMessage: String?) {
-                        super.onError(errorMessage)
-
-                    }
-
-                })
-        } catch (e: Exception) {
-            e.printStackTrace()
+        googleMap.setOnMapClickListener { latLng ->
+            lat = latLng.latitude
+            lon = latLng.longitude
+            moveCameraAndSetMarker(latLng, "Selected Location")
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                // Handle the "Up" button click
                 finish()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }

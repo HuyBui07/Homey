@@ -6,7 +6,9 @@ import com.example.homey.data.model.Estate
 import com.example.homey.utils.calculateLatLonRange
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.tasks.await
 
 class EstateRepository private constructor() {
     private val db = FirebaseFirestore.getInstance()
@@ -125,27 +127,19 @@ class EstateRepository private constructor() {
             }
     }
 
-    fun searchEstatesByName(query: String, onComplete: (List<Estate>) -> Unit) {
-        db.collection("estates")
-            .whereGreaterThanOrEqualTo("title", query)
-            .whereLessThanOrEqualTo("title", query + "\uf8ff")
-            .get()
-            .addOnSuccessListener { result ->
-                val estates = result.documents.mapNotNull { document ->
-                    document.toObject(Estate::class.java)?.apply {
-                        id = document.id
-                    }
-                }
-                onComplete(estates) // Luôn trả về danh sách, ngay cả khi rỗng
+    suspend fun searchEstatesByAddress(address: String): List<Estate> {
+        return try {
+            val result = db.collection("estates")
+                .whereEqualTo("location", address) // Tìm kiếm theo địa chỉ
+                .get()
+                .await()
+            result.documents.mapNotNull { document ->
+                document.toObject(Estate::class.java)?.apply { id = document.id }
             }
-            .addOnFailureListener { exception ->
-                // Log lỗi để debug dễ dàng hơn
-                Log.e("EstateRepository", "Error fetching estates: ${exception.message}", exception)
-                onComplete(emptyList()) // Trả về danh sách rỗng khi gặp lỗi
-            }
+        } catch (e: Exception) {
+            emptyList() // Trả về danh sách rỗng nếu có lỗi
+        }
     }
-
-
 
     companion object {
         @Volatile
