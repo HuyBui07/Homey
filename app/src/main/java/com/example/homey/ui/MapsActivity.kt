@@ -60,15 +60,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    private fun openGoogleMaps(lat: Double, lon: Double) {
-        val uri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=${currentLocation.latitude},${currentLocation.longitude}&destination=$lat,$lon&travelmode=driving")
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        intent.setPackage("com.google.android.apps.maps")
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivity(intent)
-        }
-    }
-
     override fun onMapReady(map: GoogleMap) {
         this.googleMap = map
         googleMap.setOnMarkerClickListener { marker ->
