@@ -30,6 +30,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.homey.R
 import com.example.homey.data.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -109,7 +110,13 @@ class SignupActivity : AppCompatActivity() {
             val phoneNumber = phoneNumberEditText.text.toString().trim()
             val imageUri = avatarImageView.tag as? Uri
 
-            resetErrorMessages(avatarErrorText, emailEditText, passwordEditText, userNameEditText, phoneNumberEditText)
+            resetErrorMessages(
+                avatarErrorText,
+                emailEditText,
+                passwordEditText,
+                userNameEditText,
+                phoneNumberEditText
+            )
 
             var hasError = false
 
@@ -153,21 +160,40 @@ class SignupActivity : AppCompatActivity() {
                         CoroutineScope(Dispatchers.Main).launch {
                             val avatarUrl = uploadJob.await()
                             if (avatarUrl != null) {
-                                UserRepository.getInstance().signUpUser(
-                                    avatarUrl, email, password, username, phoneNumber
-                                ) { success, _ ->
-                                    progressBar.visibility = View.GONE
-                                    if (success) {
-                                        showAlertDialogAndNavigate(
-                                            "Thành công",
-                                            "Vui lòng kiểm tra email để xác minh tài khoản!",
-                                            this@SignupActivity,
-                                            LoginActivity::class.java
-                                        )
-                                    } else {
+                                val uid = FirebaseAuth.getInstance().currentUser?.uid
+                                val user = hashMapOf(
+                                    "uid" to uid,
+                                    "email" to email,
+                                    "username" to username,
+                                    "phoneNumber" to phoneNumber,
+                                    "avatarUrl" to avatarUrl,
+                                    "favorites" to listOf<String>()
+                                )
+                                FirebaseFirestore.getInstance().collection("users").document(uid!!)
+                                    .set(user).addOnSuccessListener {
+
+                                        UserRepository.getInstance().auth.currentUser?.sendEmailVerification()
+                                            ?.addOnCompleteListener { task ->
+                                                if (task.isSuccessful) {
+                                                    showAlertDialogAndNavigate(
+                                                        "Success",
+                                                        "Please check your email to confirm your account!",
+                                                        this@SignupActivity,
+                                                        LoginActivity::class.java
+                                                    )
+                                                } else {
+                                                    progressBar.visibility = FrameLayout.GONE
+                                                    showAlertDialog(
+                                                        "Error",
+                                                        "Failed to send verification email."
+                                                    )
+                                                }
+                                            }
+
+                                    }.addOnFailureListener() {
                                         showAlertDialog("Lỗi", "Đăng ký không thành công")
                                     }
-                                }
+
                             } else {
                                 progressBar.visibility = View.GONE
                                 showAlertDialog("Lỗi", "Không thể tải ảnh đại diện")
@@ -178,7 +204,10 @@ class SignupActivity : AppCompatActivity() {
                         if (task.exception?.message?.contains("email address is already in use") == true) {
                             emailEditText.error = "Email này đã được sử dụng"
                         } else {
-                            showAlertDialog("Lỗi", task.exception?.localizedMessage ?: "Đăng ký thất bại")
+                            showAlertDialog(
+                                "Lỗi",
+                                task.exception?.localizedMessage ?: "Đăng ký thất bại"
+                            )
                         }
                     }
                 }
